@@ -5,7 +5,7 @@ import csv
 
 def read_from_csv(file):
     with open(file, newline=" ") as csv_data:
-        reader = csv.reader(csv_data)
+        reader = csv.DictReader(csv_data)
     return reader
 
 # This function takes a csv and a list as arguments:(file = csv file, fieldnames = list)
