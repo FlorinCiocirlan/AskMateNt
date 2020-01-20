@@ -7,22 +7,46 @@
 </head>
 <body>
 {% block content %}
-<table border="3px">
-
+<table>
+    <thead>
     <tr>
-    {% for keys in file.keys()%}
-        <th>{{keys}}</th>
-    {% endfor %}
-    </tr>
-    {{ file.values()}}
-        {% for val in file.values()%}
-            <tr>
-            {% for element in val%}
-            <td>{{element}}</td>
-            {% endfor %}
-            </tr>
+        {% for header in fieldnames %}
+        <th>
+        {{header}}
+        </th>
         {% endfor %}
+    </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            {% for row in file %}
+            <tr>
+            <td>
+                {{row["submission_time"]}}
+            </td>
+            <td>
+                {{row["view_number"]}}
+            </td>
+            <td>
+                {{row["vote_number"]}}
+            </td>
+            <td>
+                <a href = {{url_for('question_route', id = row['id'])}}>
+                {{row["title"]}}
+                </a>
+            </td>
+            {% endfor %}
+        </tr>
+        </tr>
+
+    </tbody>
 </table>
+<div>
+    <a href="{{url_for('add_question_route')}}">
+    <button type="button" > Add question </button>
+    </a>
+</div>
 {% endblock %}
 </body>
 </html>

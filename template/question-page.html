@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question</title>
+</head>
+<body>
+{% block content %}
+<div>
+{% for data in to_display.values() %}
+<span> {{data}}</span>
+{% endfor %}
+</div>
+{% endblock %}
+</body>
+</html>
