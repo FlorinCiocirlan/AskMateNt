@@ -1,5 +1,4 @@
 import csv
-import pandas as pd
 
 # This function takes a csv as argument
 # It returns a dict
