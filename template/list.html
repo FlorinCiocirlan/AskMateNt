@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<table border="3px">
+
+    <tr>
+    {% for keys in file.keys()%}
+        <th>{{keys}}</th>
+    {% endfor %}
+    </tr>
+    {{ file.values()}}
+        {% for val in file.values()%}
+            <tr>
+            {% for element in val%}
+            <td>{{element}}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+</table>
+{% endblock %}
+</body>
+</html>
