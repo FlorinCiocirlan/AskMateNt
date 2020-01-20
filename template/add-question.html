@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div>
+<form action = "add-question.html">
+        <p>Title</p>
+        <input name = "title">
+        <p>Message</p>
+        <textarea name= "message"></textarea>
+        <button>Submit</button>
+</form>
+</div>
+{% endblock %}
+</body>
+</html>
