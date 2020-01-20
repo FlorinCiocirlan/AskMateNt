@@ -9,7 +9,12 @@
 {% block content %}
 <div>
 {% for data in to_display.values() %}
+    {% if data%}
+        {% if ((".jpg") or (".jpeg") or (".png")) in data %}
+    <img src="{{url_for('static' , filename = data)}}"/>
+        {% endif %}
 <span> {{data}}</span>
+    {% endif %}
 {% endfor %}
 </div>
 {% endblock %}
