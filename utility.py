@@ -32,9 +32,6 @@ def get_date(time_stamp):
     return time.strftime("%a, %d %B %Y %H:%M:%S",time.localtime(int(time_stamp)))
 
 
-print(get_date(generate_submission()))
-print(generate_submission())
-
 
 
 
