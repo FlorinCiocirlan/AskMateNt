@@ -43,6 +43,9 @@ def add_question_route():
         return redirect("list")
     return render_template("add-question.html")
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 if __name__ == "__main__":
     app.run(debug=True,
