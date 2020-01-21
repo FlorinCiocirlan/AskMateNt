@@ -1,4 +1,5 @@
 import csv
+import utility
 
 
 # This function takes a csv as argument
@@ -9,6 +10,7 @@ def read_from_csv(file):
         list_of_dict = []
         reader = list(csv.DictReader(csv_data))
         for row in reader:
+            row["submission_time"] = utility.get_date(row["submission_time"])
             list_of_dict.append(row)
     return reversed(list_of_dict)
 
