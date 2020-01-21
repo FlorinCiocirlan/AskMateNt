@@ -31,3 +31,12 @@ def append_to_csv(file,fields):
     with open(file, "a", newline="") as csv_data:
         writer = csv.writer(csv_data)
         writer.writerow(fields)
+
+
+def get_answers(file):
+    with open(file, "r" , newline="") as csv_data:
+        list_of_dict = []
+        reader = list(csv.DictReader(csv_data))
+        for row in reader:
+            list_of_dict.append(row)
+    return reversed(list_of_dict)

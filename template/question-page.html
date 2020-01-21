@@ -17,6 +17,21 @@
         {% endif %}
     {% endif %}
 {% endfor %}
+
+</div>
+
+<div>
+    {% for answers in answers_to_display%}
+    <p>
+    <span>{{answers["submission_time"]}}</span>
+    <span>{{answers["vote_number"]}}</span>
+    <span>{{answers["message"]}}</span>
+        {% if ((".jpg") or (".jpeg") or (".png")) in answers %}
+    <img src="{{url_for('static', filename = 'images/'+ data)}}/>
+    </p>
+        {% endif%}
+    {% endfor %}
+
 </div>
 {% endblock %}
 </body>
