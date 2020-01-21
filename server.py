@@ -1,7 +1,13 @@
 from flask import Flask, request, redirect, render_template, url_for
 import connection, data_manager, utility
+import os
+from werkzeug.utils import secure_filename
 
-app = Flask(__name__, template_folder="template", static_folder="static")
+UPLOAD_FOLDER = 'static/images'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+app = Flask(__name__, template_folder="template", static_folder="static",)
+app.config['UPLOAD_FOLDER'] = "static/images"
 
 
 @app.route("/")
@@ -16,14 +22,27 @@ def list_route():
     return render_template("list.html", file=dicti, fieldnames=fieldnames)
 
 
-@app.route("/question/int:<id>")
+@app.route("/question/<id>")
 def question_route(id):
     question = utility.display_question(id)
     return render_template("question-page.html", to_display=question)
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question_route():
-    return redirect("list.html")
+    if request.method == "POST":
+        id = utility.generate_value("id")
+        submission_time = utility.generate_value("submission_time")
+        view_number = 0
+        vote_number = 0
+        title = request.form["title"]
+        message = request.form["message"]
+
+
+        list_to_write = [id, submission_time, view_number, vote_number, title, message]
+        connection.append_to_csv("sample_data/question.csv", list_to_write)
+
+        return redirect("list")
+    return render_template("add-question.html")
 
 if __name__ == "__main__":
     app.run(debug=True,

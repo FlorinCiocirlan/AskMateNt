@@ -16,15 +16,16 @@ def read_from_csv(file):
 # This function takes a csv and a list as arguments:(file = csv file, fieldnames = list)
 # Doesn't return anything
 
-def write_to_csv(file, fieldnames):
+def write_to_csv(file):
     with open(file, "w", newline="") as csv_data:
-        writer = csv.writer(csv_data, fieldnames=fieldnames)
+        writer = csv.writer(csv_data)
 
 
 # This function appends to a csv file
 # It takes a csv and a list as arguments:(file = csv file, fieldnames = list)
 # Doesn't return anything
 
-def append_to_csv(file, fieldnames):
+def append_to_csv(file,fields):
     with open(file, "a", newline="") as csv_data:
-        writer = csv.writer(csv_data, fieldnames=fieldnames)
+        writer = csv.writer(csv_data)
+        writer.writerow(fields)
