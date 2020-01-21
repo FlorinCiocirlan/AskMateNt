@@ -9,7 +9,7 @@
 {% block content %}
 <table>
     <thead>
-    <tr>
+    <tr class="thead-row">
         {% for header in fieldnames %}
         <th>
         {{header}}
@@ -44,8 +44,7 @@
 </table>
 <div>
     <a href="{{url_for('add_question_route')}}">
-    <a href="#" class="btn-gradient red">Button</a>
-    <button type="button" > Add question </button>
+    <button type="button" class="button-add-question"> Add question </button>
     </a>
 </div>
 {% endblock %}
