@@ -23,9 +23,6 @@ def generate_value(type_of_value):
     return max(list_of_values) + 1
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in server.ALLOWED_EXTENSIONS
 
 
 
