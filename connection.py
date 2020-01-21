@@ -5,7 +5,7 @@ import csv
 # It returns a dict
 
 def read_from_csv(file):
-    with open(file, "r") as csv_data:
+    with open(file, "r" , newline="") as csv_data:
         list_of_dict = []
         reader = list(csv.DictReader(csv_data))
         for row in reader:
