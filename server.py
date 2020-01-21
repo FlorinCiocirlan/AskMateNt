@@ -1,13 +1,12 @@
 from flask import Flask, request, redirect, render_template, url_for
 import connection, data_manager, utility
-import os
+import os, sys
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'static/images'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__, template_folder="template", static_folder="static", )
-app.config['UPLOAD_FOLDER'] = "static/images"
+app.config['UPLOAD_FOLDER'] = "static/images/"
 
 
 @app.route("/")
@@ -32,14 +31,20 @@ def question_route(id):
 def add_question_route():
     if request.method == "POST":
         id = utility.generate_value("id")
-        submission_time = utility.generate_value("submission_time")
+        submission_time = utility.generate_submission()
         view_number = 0
         vote_number = 0
         title = request.form["title"]
         message = request.form["message"]
 
-        list_to_write = [id, submission_time, view_number, vote_number, title, message]
+        if request.files["picture"]:
+            f = request.files['picture']
+            image = f.filename
+            f.save(app.config['UPLOAD_FOLDER'] + secure_filename(f.filename))
+
+        list_to_write = [id, submission_time, view_number, vote_number, title, message, image]
         connection.append_to_csv("sample_data/question.csv", list_to_write)
+
         return redirect("list")
     return render_template("add-question.html")
 
