@@ -24,13 +24,14 @@ def list_route():
 @app.route("/question/<id>")
 def question_route(id):
     question = utility.display_question(id)
-    return render_template("question-page.html", to_display=question)
+    answers = utility.display_answer(id)
+    return render_template("question-page.html", to_display=question , answers_to_display = answers )
 
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question_route():
     if request.method == "POST":
-        id = utility.generate_value("id")
+        id = utility.generate_value("id", "sample_data/question.csv")
         submission_time = utility.generate_submission()
         view_number = 0
         vote_number = 0
@@ -49,9 +50,9 @@ def add_question_route():
     return render_template("add-question.html")
 
 @app.route("/question/<id>/new-answer" ,methods=["GET", "POST"])
+
 def answer_route(id):
-    id = utility.display_question(id)
-    return render_template("add-answer.html", id = id )
+    return render_template("add-answer.html", id = id)
 
 
 if __name__ == "__main__":
