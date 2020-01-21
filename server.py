@@ -45,8 +45,8 @@ def add_question_route():
 
 @app.route("/question/<id>/new-answer" ,methods=["GET", "POST"])
 def answer_route(id):
-    id = utility.display_question(id)
-    return render_template("add-answer.html", id = id )
+    id = utility.display_question("id")
+    return render_template("add-answer.html")
 
 
 if __name__ == "__main__":
