@@ -11,7 +11,7 @@
 {% for data in to_display.values() %}
     {% if data %}
         {% if ((".jpg") or (".jpeg") or (".png")) in data %}
-    <div class="question-image"><img src="{{url_for('static', filename = 'images/'+ data)}}"/></div>
+    <div class="question-image"><img src="{{url_for('static', filename = 'images/'+ data)}}" width="640" height="640"/></div>
         {% else %}
     <span class="answer-text"> {{data}}</span>
         {% endif %}
@@ -23,9 +23,9 @@
 <div>
     {% for answers in answers_to_display%}
     <p>
-    <span>{{answers["submission_time"]}}</span>
-    <span>{{answers["vote_number"]}}</span>
-    <span>{{answers["message"]}}</span>
+    <span class="submission-time">{{answers["submission_time"]}}</span>
+    <span class="vote-number">{{answers["vote_number"]}}</span>
+    <span class="message">{{answers["message"]}}</span>
         {% if ((".jpg") or (".jpeg") or (".png")) in answers %}
     <img src="{{url_for('static', filename = 'images/'+ data)}}/>
     </p>

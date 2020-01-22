@@ -111,8 +111,8 @@ thead {
 
 .question-image {
     margin-top: 50px;
-    height: 300px;
-    border-radius: 15px;
+    height: 50px;
+    border-radius: 40px;
 }
 
 .text {
@@ -126,4 +126,9 @@ thead {
     margin-left: auto;
     margin-right: auto;
     width: 50%;
+}
+
+.coloration {
+    font-size: 50px;
+    color: red;
 }
