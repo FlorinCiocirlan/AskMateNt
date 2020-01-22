@@ -54,6 +54,9 @@ def add_question_route():
 def answer_route(id):
     return render_template("add-answer.html", id = id)
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 if __name__ == "__main__":
     app.run(debug=True,

@@ -7,13 +7,13 @@
 </head>
 <body>
 {% block content %}
-<div>
+<div class="text">
 {% for data in to_display.values() %}
     {% if data %}
         {% if ((".jpg") or (".jpeg") or (".png")) in data %}
-    <img src="{{url_for('static', filename = 'images/'+ data)}}" />
+    <div class="question-image"><img src="{{url_for('static', filename = 'images/'+ data)}}"/></div>
         {% else %}
-    <span> {{data}}</span>
+    <span class="answer-text"> {{data}}</span>
         {% endif %}
     {% endif %}
 {% endfor %}
