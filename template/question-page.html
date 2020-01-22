@@ -29,9 +29,14 @@
         {% if ((".jpg") or (".jpeg") or (".png")) in answers %}
     <img src="{{url_for('static', filename = 'images/'+ data)}}/>
     </p>
+    
         {% endif%}
     {% endfor %}
-
+    <p>
+        <a href = "{{url_for('answer_route', question_id = question_id)}}">
+            Add comment
+        </a>
+    </p>
 </div>
 {% endblock %}
 </body>

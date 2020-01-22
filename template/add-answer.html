@@ -8,10 +8,10 @@
 <body>
 {% block content %}
 <div>
-<form action = "{{url_for('answer_route', )}}" method="post">
-        <p>Answer</p>
+<form action = "{{url_for('answer_route', question_id=question_id )}}" method="post">
+        <p>Comment</p>
         <textarea name= "answer" required></textarea>
-        <input type="submit" value="Upload" name="submit-button">
+        <input type="submit" value="Leave comment" name="submit-button">
 </form>
 </div>
 {% endblock %}

@@ -25,7 +25,7 @@ def list_route():
 def question_route(id):
     question = utility.display_question(id)
     answers = utility.display_answer(id)
-    return render_template("question-page.html", to_display=question , answers_to_display = answers )
+    return render_template("question-page.html", to_display=question , answers_to_display = answers, question_id=id )
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -49,10 +49,21 @@ def add_question_route():
         return redirect("list")
     return render_template("add-question.html")
 
-@app.route("/question/<id>/new-answer" ,methods=["GET", "POST"])
 
-def answer_route(id):
-    return render_template("add-answer.html", id = id)
+@app.route("/question/<question_id>/new-answer" ,methods=["GET", "POST"])
+def answer_route(question_id):
+    if request.method == "GET":
+        return render_template("add-answer.html", question_id=question_id)
+    elif request.method == "POST":
+        id = utility.generate_value("id", "sample_data/answer.csv")
+        submission_time = utility.generate_submission()
+        vote_number = 0
+        answer = request.form["answer"]
+        image = ""
+        answer_list = [id, submission_time, vote_number, question_id, answer, image]
+        connection.append_to_csv("sample_data/answer.csv", answer_list)
+        return redirect(url_for("question_route", id = question_id))
+        
 
 @app.route("/about")
 def about():
