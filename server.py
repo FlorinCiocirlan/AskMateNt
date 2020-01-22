@@ -42,6 +42,8 @@ def add_question_route():
             f = request.files['picture']
             image = f.filename
             f.save(app.config['UPLOAD_FOLDER'] + secure_filename(f.filename))
+        else:
+            image = ""
 
         list_to_write = [id, submission_time, view_number, vote_number, title, message, image]
         connection.append_to_csv("sample_data/question.csv", list_to_write)
