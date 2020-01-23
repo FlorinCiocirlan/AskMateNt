@@ -1,14 +1,16 @@
 import csv
+import utility
 
 
 # This function takes a csv as argument
 # It returns a dict
 
 def read_from_csv(file):
-    with open(file, "r") as csv_data:
+    with open(file, "r" , newline="") as csv_data:
         list_of_dict = []
         reader = list(csv.DictReader(csv_data))
         for row in reader:
+            row["submission_time"] = utility.get_date(row["submission_time"])
             list_of_dict.append(row)
     return reversed(list_of_dict)
 
@@ -29,3 +31,12 @@ def append_to_csv(file,fields):
     with open(file, "a", newline="") as csv_data:
         writer = csv.writer(csv_data)
         writer.writerow(fields)
+
+
+def get_answers(file):
+    with open(file, "r" , newline="") as csv_data:
+        list_of_dict = []
+        reader = list(csv.DictReader(csv_data))
+        for row in reader:
+            list_of_dict.append(row)
+    return reversed(list_of_dict)

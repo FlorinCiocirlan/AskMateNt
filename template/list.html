@@ -7,9 +7,10 @@
 </head>
 <body>
 {% block content %}
-<table>
+<table class="forum-table">
     <thead>
-    <tr>
+        <div>
+    <tr class="thead-row">
         {% for header in fieldnames %}
         <th>
         {{header}}
@@ -19,7 +20,7 @@
     </thead>
 
     <tbody>
-        <tr>
+        <tr class = "tbody-row">
             {% for row in file %}
             <tr>
             <td>
@@ -42,9 +43,10 @@
 
     </tbody>
 </table>
+</div>
 <div>
     <a href="{{url_for('add_question_route')}}">
-    <button type="button" > Add question </button>
+    <button type="button" class="button-add-question"> Add question </button>
     </a>
 </div>
 {% endblock %}

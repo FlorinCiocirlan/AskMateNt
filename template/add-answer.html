@@ -1,0 +1,19 @@
+{% extends 'question-page.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div>
+<form action = "{{url_for('answer_route', question_id=question_id )}}" method="post">
+        <p>Comment</p>
+        <textarea name= "answer" required></textarea>
+        <input type="submit" value="Leave comment" name="submit-button">
+</form>
+</div>
+{% endblock %}
+</body>
+</html>

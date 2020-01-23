@@ -7,15 +7,36 @@
 </head>
 <body>
 {% block content %}
-<div>
+<div class="text">
 {% for data in to_display.values() %}
-    {% if data%}
+    {% if data %}
         {% if ((".jpg") or (".jpeg") or (".png")) in data %}
-    <img src="{{url_for('static' , filename = data)}}"/>
+    <div class="question-image"><img src="{{url_for('static', filename = 'images/'+ data)}}"/></div>
+        {% else %}
+    <span class="answer-text"> {{data}}</span>
         {% endif %}
-<span> {{data}}</span>
     {% endif %}
 {% endfor %}
+
+</div>
+
+<div>
+    {% for answers in answers_to_display%}
+    <p>
+    <span>{{answers["submission_time"]}}</span>
+    <span>{{answers["vote_number"]}}</span>
+    <span>{{answers["message"]}}</span>
+        {% if ((".jpg") or (".jpeg") or (".png")) in answers %}
+    <img src="{{url_for('static', filename = 'images/'+ data)}}/>
+    </p>
+    
+        {% endif%}
+    {% endfor %}
+    <p>
+        <a href = "{{url_for('answer_route', question_id = question_id)}}">
+            Add comment
+        </a>
+    </p>
 </div>
 {% endblock %}
 </body>
