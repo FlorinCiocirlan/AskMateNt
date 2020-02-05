@@ -16,7 +16,7 @@ def index_route():
 
 @app.route("/list")
 def list_route():
-    dicti = connection.read_from_csv("sample_data/question.csv")
+    dicti = data_manager.read_from_csv("sample_data/question.csv")
     fieldnames = ["Submission time", "View number", "Vote number", "Title"]
     return render_template("list.html", file=dicti, fieldnames=fieldnames)
 
@@ -46,7 +46,7 @@ def add_question_route():
             image = ""
 
         list_to_write = [id, submission_time, view_number, vote_number, title, message, image]
-        connection.append_to_csv("sample_data/question.csv", list_to_write)
+        data_manager.append_to_csv("sample_data/question.csv", list_to_write)
 
         return redirect("list")
     return render_template("add-question.html")
@@ -63,7 +63,7 @@ def answer_route(question_id):
         answer = request.form["answer"]
         image = ""
         answer_list = [id, submission_time, vote_number, question_id, answer, image]
-        connection.append_to_csv("sample_data/answer.csv", answer_list)
+        data_manager.append_to_csv("sample_data/answer.csv", answer_list)
         return redirect(url_for("question_route", id = question_id))
         
 
