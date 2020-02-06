@@ -8,29 +8,24 @@
 <body>
 {% block content %}
 <div class="text">
+    <p>
 {% for data in to_display.values() %}
-    {% if data %}
-        {% if ((".jpg") or (".jpeg") or (".png")) in data %}
-    <div class="question-image"><img src="{{url_for('static', filename = 'images/'+ data)}}"/></div>
-        {% else %}
-    <span class="answer-text"> {{data}}</span>
-        {% endif %}
-    {% endif %}
+        <span>{{data}}</span>
 {% endfor %}
+    </p>
+
 
 </div>
 
 <div>
+
     {% for answers in answers_to_display%}
     <p>
-    <span>{{answers["submission_time"]}}</span>
-    <span>{{answers["vote_number"]}}</span>
-    <span>{{answers["message"]}}</span>
-        {% if ((".jpg") or (".jpeg") or (".png")) in answers %}
-    <img src="{{url_for('static', filename = 'images/'+ data)}}/>
+    <span>{{answers['id']}}</span>
+    <span>{{answers['submission_time']}}</span>
+    <span>{{answers['message']}}</span>
+    <span>{{answers['vote_number']}}</span>
     </p>
-    
-        {% endif%}
     {% endfor %}
     <p>
         <a href = "{{url_for('answer_route', question_id = question_id)}}">

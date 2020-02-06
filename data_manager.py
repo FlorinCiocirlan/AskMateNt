@@ -1,35 +1,62 @@
-def read_from_csv(file):
-    with open(file, "r" , newline="") as csv_data:
-        list_of_dict = []
-        reader = list(csv.DictReader(csv_data))
-        for row in reader:
-            row["submission_time"] = utility.get_date(row["submission_time"])
-            list_of_dict.append(row)
-    return reversed(list_of_dict)
+import connection, utility
+
+@connection.connection_handler
+def get_all_questions(cursor):
+    cursor.execute("""SELECT * FROM question;""")
+    data = cursor.fetchall()
+    return data
+
+#  @connection.connection_handler
+# def get_all_answers(cursor):
+#     cursor.execute("""SELECT * FROM answer;""")
+#     data = cursor.fetchall()
+#     return data
+#
+
+@connection.connection_handler
+def add_question(cursor, title, message):
+
+    id = utility.generate_question_id()
+    submission_time = utility.get_date()
+    view_number = 0
+    vote_number = 0
+    title = title
+    message = message
+    image = ''
+
+    cursor.execute("""INSERT INTO question VALUES('{id}','{submission_time}', '{view_number}', '{vote_number}', '{title}', '{message}', '{image}');""".format(
+        id=id, submission_time=submission_time, view_number=view_number, vote_number=vote_number, title=title, message=message, image=image
+    ))
 
 
-# This function takes a csv and a list as arguments:(file = csv file, fieldnames = list)
-# Doesn't return anything
-
-def write_to_csv(file):
-    with open(file, "w", newline="") as csv_data:
-        writer = csv.writer(csv_data)
-
-
-# This function appends to a csv file
-# It takes a csv and a list as arguments:(file = csv file, fieldnames = list)
-# Doesn't return anything
-
-def append_to_csv(file,fields):
-    with open(file, "a", newline="") as csv_data:
-        writer = csv.writer(csv_data)
-        writer.writerow(fields)
+@connection.connection_handler
+def add_answers(cursor, question_id, message):
+    id = utility.generate_answer_id()
+    submission_time = utility.get_date()
+    vote_number = 0
+    message=message
+    image = ''
+    question_id=question_id
+    cursor.execute("""INSERT INTO answer VALUES('{id}','{submission_time}', '{vote_number}', '{question_id}', '{message}', '{image}');""".format(
+    id=id, submission_time=submission_time, vote_number=vote_number, question_id=question_id, message=message, image=image
+    ))
 
 
-def get_answers(file):
-    with open(file, "r" , newline="") as csv_data:
-        list_of_dict = []
-        reader = list(csv.DictReader(csv_data))
-        for row in reader:
-            list_of_dict.append(row)
-    return reversed(list_of_dict)
+
+@connection.connection_handler
+def get_question(cursor, question_id):
+    cursor.execute("""SELECT * FROM question WHERE id=%(id)s;""",
+                   {"id":question_id}
+                   )
+
+    question = cursor.fetchone()
+    return question
+
+@connection.connection_handler
+def get_all_answers(cursor, question_id):
+    cursor.execute("""SELECT * FROM answer WHERE question_id=%(question_id)s;""",
+                   {"question_id": question_id}
+                   )
+
+    answer = cursor.fetchall()
+    return answer
