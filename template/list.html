@@ -8,24 +8,24 @@
 <body>
 {% block content %}
 <form action="{{url_for('list_route')}}" method="post">
-    <select name="sort_by">
+    <select name="sort_by" class="sort-by">
         <option>Title</option>
         <option>Submission time</option>
         <option>Message</option>
         <option>Views</option>
         <option>Votes</option>
     </select>
-    <select name="direction">
+    <select name="direction" class="sort-by">
         <option>ASC</option>
         <option>DESC</option>
     </select>
-    <input type="submit" name="Submit" value="Order">
+    <input type="submit" name="Submit" value="Order" class="order-button">
 </form>
 
 <table class="forum-table">
     <thead>
         <div>
-    <tr class="thead-row">
+    <tr>
         {% for header in fieldnames %}
         <th>
         {{header}}
@@ -35,7 +35,7 @@
     </thead>
 
     <tbody>
-        <tr class = "tbody-row">
+        <tr>
             {% for row in file %}
             <tr>
             <td>

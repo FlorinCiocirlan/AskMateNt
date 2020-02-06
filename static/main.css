@@ -5,30 +5,10 @@ body {
     padding-bottom: 55px;
 }
 
-table {
-    text-align: center;
-    margin-top: 15px;
-    margin-left: 30px;
-    font-size: 20px;
-}
-
-thead {
-    margin-left: 20px;
-}
 
 .add-question-content {
     padding: 30px 30px 30px 30px;
 }
-
-.thead-row > th {
-    padding: 150px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    font-size: 25px;
-    margin-left: 50px;
-
-}
-
 
 .about-div {
     padding: 100px 400px 30px 400px;
@@ -115,15 +95,101 @@ thead {
     border-radius: 15px;
 }
 
-.text {
+
+
+table {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%;
+}
+
+.forum-table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+th{
+    font-size: 25px;
+}
+
+td{
+    font-size: 18px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.home-tr {
+    font-size: 20px;
+    border: 5px solid #f1fdff;
+    border-collapse: collapse;
+    background-color: #c1cccc;
+}
+
+.delete-edit-question {
+    position: relative;
+    display: inline;
+    justify-content: space-between;
+    position: relative;
     font-size: 25px;
     font-family: Ubuntu;
 }
 
-.forum-table {
-    top: 10%;
-    margin-bottom: auto;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+#delete {
+    background-color: #ff3a3d;
+    border: 5px solid #ff3a3d;
+    border-radius: 10px;
+    font-size: 13px;
+    color: white;
+    text-decoration: none;
+}
+
+#edit {
+    background-color: #4CAF50;
+    border: 5px solid #4CAF50;
+    border-radius: 10px;
+    font-size: 13px;
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+#add-comment {
+    background-color: #4CAF50;
+    border: 5px solid #4CAF50;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#delete-answer {
+    background-color: #ff3a3d;
+    border: 7px solid #ff3a3d;
+    border-radius: 10px;
+    font-size: 13px;
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.answer{
+    margin-top: 20px;
+    margin-left: 5px;
+    background-color: #c0c0c7;
+    border: 2px solid #c0c0c7;
+    border-radius: 13px;
+    width: fit-content;
+}
+
+.sort-by{
+    background-color: white;
+    color: black;
+}
+.order-button{
+    background-color: #4CAF50;
+    color: white;
 }

@@ -18,14 +18,9 @@
     </h2>
 </div>
 <table>
-    <thead>
-        {% for header in headers%}
-        <th>{{header}}</th>
-        {% endfor %}
-    </thead>
     <tbody>
     {% for question in latest_questions %}
-        <tr>
+        <tr class="home-tr">
             <td>{{question['submission_time']}}</td>
             <td>{{question['view_number']}}</td>
             <td>{{question['vote_number']}}</td>

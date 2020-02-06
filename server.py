@@ -12,7 +12,6 @@ app.config['UPLOAD_FOLDER'] = "static/images/"
 @app.route("/")
 def index_route():
     list_latest_questions = data_manager.get_latest_questions()
-    print(list_latest_questions)
     fieldnames = ["Submission time", "View number", "Vote number", "Title"]
     return render_template("index.html", latest_questions=list_latest_questions, headers=fieldnames)
 

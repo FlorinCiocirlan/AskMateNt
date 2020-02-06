@@ -7,39 +7,34 @@
 </head>
 <body>
 {% block content %}
-<div class="text">
-    <p>
-{% for data in to_display.values() %}
-        <span>{{data}}</span>
-{% endfor %}
-<div>
-    <a href="{{url_for('delete_question', question_id=question_id)}}">Delete question</a>
-</div>
-    </p>
-<div>
-    <a href="{{url_for('edit_route', question_id=question_id)}}">Edit question</a>
-</div>
+<div class="delete-edit-question">
 
+    <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
+    <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
+        <span>{{to_display['submission_time']}}</span>
+        <span>{{to_display['title']}}</span>
+        <span>{{to_display['vote_number']}}</span>
+        <span>{{to_display['view_number']}}</span>
+        <span>{{to_display['message']}}</span>
 
 </div>
 
 <div>
-
-    {% for answers in answers_to_display%}
     <p>
-    <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}">Delete answer</a></span>
-    <span>{{answers['id']}}</span>
-    <span>{{answers['submission_time']}}</span>
-    <span>{{answers['message']}}</span>
-    <span>{{answers['vote_number']}}</span>
-
-    </p>
-    {% endfor %}
-    <p>
-        <a href = "{{url_for('answer_route', question_id = question_id)}}">
+        <a href = "{{url_for('answer_route', question_id = question_id)}}" id="add-comment">
             Add comment
         </a>
     </p>
+
+    {% for answers in answers_to_display%}
+    <p class="answer">
+    <span>{{answers['submission_time']}}</span>
+    <span>{{answers['message']}}</span>
+    <span>{{answers['vote_number']}}</span>
+    <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">Delete answer</a></span>
+
+    </p>
+    {% endfor %}
 </div>
 
 {% endblock %}
