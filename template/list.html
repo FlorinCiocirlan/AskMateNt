@@ -7,6 +7,21 @@
 </head>
 <body>
 {% block content %}
+<form action="{{url_for('list_route')}}" method="post">
+    <select name="sort_by">
+        <option>Title</option>
+        <option>Submission time</option>
+        <option>Message</option>
+        <option>Views</option>
+        <option>Votes</option>
+    </select>
+    <select name="direction">
+        <option>ASC</option>
+        <option>DESC</option>
+    </select>
+    <input type="submit" name="Submit" value="Submit">
+</form>
+
 <table class="forum-table">
     <thead>
         <div>
