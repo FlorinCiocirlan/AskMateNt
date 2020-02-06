@@ -7,6 +7,18 @@ def get_all_questions(cursor):
     data = cursor.fetchall()
     return data
 
+def get_latest_questions():
+    list_latest_questions = []
+    latest_questions = get_all_questions()
+    if len(latest_questions) >= 5:
+        for question in range(0,5):
+            list_latest_questions.append(latest_questions[question])
+    else:
+        for question in range(0,len(latest_questions)):
+            list_latest_questions.append(latest_questions[question])
+    return list_latest_questions
+
+
 
 #  @connection.connection_handler
 # def get_all_answers(cursor):
