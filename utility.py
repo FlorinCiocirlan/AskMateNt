@@ -24,6 +24,19 @@ def generate_answer_id(cursor,):
     return max(list_of_ids) + 1
 
 
+@connection.connection_handler
+def sort_question(cursor, sortby, direction):
+    if "time" in sortby:
+        sortby = "submission" + "_time"
+    elif sortby == "votes":
+        sortby = sortby.rstrip("s").lower() + "_number"
+    elif sortby == "views":
+        sortby = sortby.rstrip("s").lower() + "_numbers"
+
+    cursor.execute("""SELECT * from question ORDER BY {sortby} {direction};""".format(sortby=sortby, direction=direction))
+    sorted_question = cursor.fetchall()
+    return sorted_question
+
 
 
 def get_date():
