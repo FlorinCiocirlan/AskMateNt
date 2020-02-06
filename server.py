@@ -69,12 +69,14 @@ def edit_route(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET","POST"])
 def delete_question(question_id):
-    if request.method == "GET":
-        return render_template("delete-question.html",question_id=question_id)
-    elif request.method == "POST":
-        data_manager.delete_row("answer", "question_id", question_id)
-        data_manager.delete_row("question", "id", question_id)
-        return redirect(url_for("list_route"))
+    data_manager.delete_row("answer", "question_id", question_id)
+    data_manager.delete_row("question", "id", question_id)
+    return redirect(url_for("list_route"))
+
+@app.route("/<question_id>/answer/<answer_id>/delete")
+def delete_answer(answer_id, question_id):
+    data_manager.delete_row("answer", "id", answer_id )
+    return redirect(url_for('question_route' , id=question_id))
 
 
 

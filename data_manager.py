@@ -3,7 +3,7 @@ import connection, utility
 
 @connection.connection_handler
 def get_all_questions(cursor):
-    cursor.execute("""SELECT * FROM question;""")
+    cursor.execute("""SELECT * FROM question ORDER BY submission_time DESC;""")
     data = cursor.fetchall()
     return data
 
