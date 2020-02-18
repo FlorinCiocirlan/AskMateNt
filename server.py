@@ -34,7 +34,8 @@ def list_route():
 def question_route(id):
     question = data_manager.get_question(id)
     answers = data_manager.get_all_answers(id)
-    return render_template("question-page.html", to_display=question, answers_to_display=answers, question_id=id)
+    comments = data_manager.get_question_comments(id)
+    return render_template("question-page.html", to_display=question, answers_to_display=answers, question_id=id, comments=comments)
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -66,7 +67,7 @@ def edit_route(question_id):
     elif request.method == "POST":
         title=request.form['title']
         message=request.form['message']
-        data_manager.update_data("question",title,message,question_id)
+        data_manager.update_question("question",title,message,question_id)
         return redirect(url_for('question_route', id=question_id))
 
 @app.route("/question/<question_id>/delete", methods=["GET","POST"])
@@ -80,6 +81,16 @@ def delete_answer(answer_id, question_id):
     data_manager.delete_row("answer", "id", answer_id )
     return redirect(url_for('question_route' , id=question_id))
 
+@app.route("/<question_id>/answer/<answer_id>/edit", methods=["GET", "POST"])
+def edit_answer(answer_id, question_id):
+    if request.method == "GET":
+        answer = utility.get_answer(answer_id,question_id)
+        return render_template("edit-answer.html", answer=answer, question_id=question_id)
+    elif request.method == "POST":
+        message=request.form['message']
+        data_manager.update_answer(answer_id, message)
+        return redirect(url_for('question_route', id=question_id))
+
 @app.route('/answer/<answer_id>/new-comment', methods=['GET','POST'])
 def add_comment_to_answer(answer_id):
     if request.method == 'GET':
@@ -88,6 +99,14 @@ def add_comment_to_answer(answer_id):
         data_manager.add_comment_ans(answer_id, request.form['comment_answer'])
         return redirect(url_for('question_route', id=answer_route))
     return render_template('question-page.html')
+
+
+
+@app.route("/question/<question_id>/new_comment", methods=["GET", "POST"])
+def question_comment_route(question_id):
+    if request.method == "GET":
+        return render_template("add-question-comment.html")
+
 
 
 
