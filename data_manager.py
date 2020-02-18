@@ -19,13 +19,18 @@ def get_latest_questions():
     return list_latest_questions
 
 
+@connection.connection_handler
+def get_all_question_comments(cursor):
+    cursor.execute("""SELECT * FROM comment WHERE question_id IS NOT NULL;""")
+    question_comments=cursor.fetchall()
+    return question_comments
 
-#  @connection.connection_handler
-# def get_all_answers(cursor):
-#     cursor.execute("""SELECT * FROM answer;""")
-#     data = cursor.fetchall()
-#     return data
-#
+def get_question_comments(id):
+    comments = get_all_question_comments()
+    for comment in comments:
+        if int(comment['question_id']) == int(id):
+            return comment
+
 
 @connection.connection_handler
 def add_question(cursor, title, message):
@@ -74,15 +79,19 @@ def get_all_answers(cursor, question_id):
     cursor.execute("""SELECT * FROM answer WHERE question_id=%(question_id)s;""",
                    {"question_id": question_id}
                    )
-
     answer = cursor.fetchall()
     return answer
 
 
 @connection.connection_handler
-def update_data(cursor, table, title, message, question_id):
+def update_question(cursor, table, title, message, question_id):
     cursor.execute(f"""UPDATE {table} SET title = '{title}', message = '{message}' WHERE id={question_id};""")
+
+@connection.connection_handler
+def update_answer(cursor, answer_id, message):
+    cursor.execute(f"""UPDATE answer SET message = '{message}' WHERE id={answer_id};""")
 
 @connection.connection_handler
 def delete_row(cursor, table, identifier, question_id):
     cursor.execute(f"""DELETE FROM {table} WHERE {identifier} = {question_id}; """)
+

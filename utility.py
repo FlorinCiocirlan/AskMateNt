@@ -1,5 +1,5 @@
 from datetime import datetime
-import connection
+import connection, data_manager
 
 # This function takes a string as parameter
 # It searches the maximum value of "ids" or "submission times"
@@ -31,7 +31,7 @@ def sort_question(cursor, sortby, direction):
     elif sortby == "votes":
         sortby = sortby.rstrip("s").lower() + "_number"
     elif sortby == "views":
-        sortby = sortby.rstrip("s").lower() + "_numbers"
+        sortby = sortby.rstrip("s").lower() + "_number"
 
     cursor.execute("""SELECT * from question ORDER BY {sortby} {direction};""".format(sortby=sortby, direction=direction))
     sorted_question = cursor.fetchall()
@@ -40,7 +40,12 @@ def sort_question(cursor, sortby, direction):
 
 
 def get_date():
-    return datetime.now().strftime("%Y-%d-%m %H:%M:%S")
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+def get_answer(answer_id, question_id):
+    for answer in data_manager.get_all_answers(question_id):
+        if int(answer['id']) == int(answer_id):
+            return answer
 
 
 

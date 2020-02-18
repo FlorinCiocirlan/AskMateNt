@@ -1,0 +1,16 @@
+{% extends 'layout.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content%}
+<form action="{{url_for('add_question_comment')}}" method="POST">
+    <label>Comment</label>
+    <textarea name="question-comment" rows="25" cols="35"></textarea>
+</form>
+{% endblock %}
+</body>
+</html>
