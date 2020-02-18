@@ -1,0 +1,310 @@
+body {
+    background-color: #E8E8E8;
+    font-family: Ubuntu;
+    text-align: center;
+    padding-bottom: 55px;
+}
+
+
+.add-question-content {
+    padding: 30px 30px 30px 30px;
+}
+
+.about-div {
+    padding: 100px 400px 30px 400px;
+    color: #484848;
+}
+
+.about-text {
+    text-align: center;
+    font-size: 30px;
+}
+
+.nav-item {
+    font-size: 35px;
+    font-family: Ubuntu;
+}
+
+.navbar-nav {
+    margin-left: 20px;
+}
+
+.home-title {
+    text-align: center;
+}
+
+.home-text {
+    padding: 40px 40px 40px 40px;
+    color: #484848;
+}
+
+.button{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button-add-question {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    margin-top: 25px;
+    margin-left: 25px;
+}
+
+#browse-button {
+    margin-top: 40px;
+    position: relative;
+}
+
+#upload-button {
+    position: relative;
+    height: 62px;
+    width: 350px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 33px;
+  background-color: white;
+  color: black;
+  text-align: center;
+  font-size: 20px;
+}
+
+.question-image {
+    margin-top: 50px;
+    height: 300px;
+    border-radius: 15px;
+}
+
+
+
+table {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%;
+}
+
+.forum-table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+th{
+    font-size: 25px;
+}
+
+td{
+    font-size: 18px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.home-tr {
+    font-size: 20px;
+    border: 5px solid #f1fdff;
+    border-collapse: collapse;
+    background-color: #c1cccc;
+}
+
+.delete-edit-question {
+    box-shadow: 0px 0px 100px white;
+    position: relative;
+    font-family: Ubuntu;
+    background-color: rgb(255, 255, 255);
+    border: 10px solid rgb(255, 255, 255);
+    border-radius: 35px;
+    overflow: visible;
+    color: black;
+    width: auto;
+    margin-left: 2%;
+    margin-top: 2%;
+    margin-right: 2%;
+    height: auto;
+}
+
+#delete {
+    background-color: #ff3a3d;
+    border: 5px solid #ff3a3d;
+    border-radius: 10px;
+    font-size: 10px;
+    color: white;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    justify-self: flex-end;
+    left: 0px;
+    width: fit-content;
+}
+
+#edit {
+    background-color: #4CAF50;
+    border: 5px solid #4CAF50;
+    border-radius: 10px;
+    font-size: 10px;
+    color: white;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    justify-self: flex-end;
+    left: 0px;
+    width: fit-content;
+}
+
+#add-comment {
+    background-color: #4CAF50;
+    border: 5px solid #4CAF50;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#delete-answer {
+    background-color: #ff3a3d;
+    border: 7px solid #ff3a3d;
+    border-radius: 10px;
+    font-size: 10px;
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+#edit-answer {
+    background-color: #4CAF50;
+    border: 7px solid #4CAF50;
+    border-radius: 10px;
+    font-size: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+
+.question-answers {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 1%;
+    background-color: #c0c0c7;
+    border: 2px solid #c0c0c7;
+    border-radius: 30px;
+    border-collapse: collapse;
+}
+
+.sort-by{
+    background-color: white;
+    color: black;
+}
+.order-button{
+    background-color: #4CAF50;
+    color: white;
+}
+
+.answer-title{
+    font-size: 25px;
+    font-weight: normal;
+}
+
+#q-submission-time {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#q-title {
+    position: relative;
+    text-align: center;
+    font-size: 20px;
+    display: block;
+}
+
+#q-message {
+    position: relative;
+    font-size: 15px;
+    text-align: center;
+    display: block;
+}
+
+#q-vote {
+    position: relative;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#q-view{
+    position: relative;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    width: fit-content;
+}
+
+.stats{
+    display: block;
+    position: relative;
+    display: flex;
+    width: auto;
+    justify-content: space-between;
+    margin-top: 3%;
+    margin-right: 1%;
+    margin-left: 1%;
+}
+
+#answer-message {
+    position: relative;
+    font-size: 16px;
+    text-align: center;
+    left: 0px;
+    bottom: 0px;
+    display: block;
+}
+
+#answer-vote {
+    font-size: 13px;
+    font-weight: bold;
+
+}
+
+#answer-submission {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.answer-stats{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3%;
+    margin-right: 1%;
+    margin-left: 1%;
+    margin-bottom: 2%;
+}
+
+.question-comments {
+    margin-left: 2%;
+    margin-right: 2%;
+}

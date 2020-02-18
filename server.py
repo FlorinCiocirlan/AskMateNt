@@ -1,52 +1,118 @@
 from flask import Flask, request, redirect, render_template, url_for
 import connection, data_manager, utility
-import os
+import os, sys
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'static/images'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__, template_folder="template", static_folder="static", )
-app.config['UPLOAD_FOLDER'] = "static/images"
+app.config['UPLOAD_FOLDER'] = "static/images/"
 
 
 @app.route("/")
 def index_route():
-    return render_template("index.html")
-
-
-@app.route("/list")
-def list_route():
-    dicti = connection.read_from_csv("sample_data/question.csv")
+    list_latest_questions = data_manager.get_latest_questions()
     fieldnames = ["Submission time", "View number", "Vote number", "Title"]
-    return render_template("list.html", file=dicti, fieldnames=fieldnames)
+    return render_template("index.html", latest_questions=list_latest_questions, headers=fieldnames)
+
+
+@app.route("/list", methods=["GET", "POST"])
+def list_route():
+    if request.method == "GET":
+        questions = data_manager.get_all_questions()
+        fieldnames = ["Submission time", "View number", "Vote number", "Title"]
+        return render_template("list.html", file=questions, fieldnames=fieldnames)
+    elif request.method == "POST":
+        fieldnames = ["Submission time", "View number", "Vote number", "Title"]
+        direction = request.form['direction'].lower()
+        sort_by = request.form['sort_by'].lower()
+        sorted_questions = utility.sort_question(sort_by, direction)
+        return render_template("list.html", file=sorted_questions, fieldnames=fieldnames)
 
 
 @app.route("/question/<id>")
 def question_route(id):
-    question = utility.display_question(id)
-    return render_template("question-page.html", to_display=question)
+    question = data_manager.get_question(id)
+    answers = data_manager.get_all_answers(id)
+    comments = data_manager.get_question_comments(id)
+    return render_template("question-page.html", to_display=question, answers_to_display=answers, question_id=id, comments=comments)
 
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question_route():
     if request.method == "POST":
-        id = utility.generate_value("id")
-        submission_time = utility.generate_value("submission_time")
-        view_number = 0
-        vote_number = 0
-        title = request.form["title"]
-        message = request.form["message"]
-
-        list_to_write = [id, submission_time, view_number, vote_number, title, message]
-        connection.append_to_csv("sample_data/question.csv", list_to_write)
+        data_manager.add_question(request.form['title'], request.form['message'])
         return redirect("list")
     return render_template("add-question.html")
+
 
 @app.route("/question/<id>/new-answer" ,methods=["GET", "POST"])
 def answer_route(id):
     id = utility.display_question("id")
     return render_template("add-answer.html")
+
+
+@app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
+def answer_route(question_id):
+    if request.method == "GET":
+        return render_template("add-answer.html", question_id=question_id)
+    elif request.method == "POST":
+        data_manager.add_answers(question_id, request.form['message'])
+        return redirect(url_for("question_route", id=question_id))
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/question/<question_id>/edit", methods=["GET", "POST"])
+def edit_route(question_id):
+    if request.method == "GET":
+        question = data_manager.get_question(question_id)
+        return render_template("edit-question.html", question=question, question_id=question_id)
+    elif request.method == "POST":
+        title=request.form['title']
+        message=request.form['message']
+        data_manager.update_question("question",title,message,question_id)
+        return redirect(url_for('question_route', id=question_id))
+
+@app.route("/question/<question_id>/delete", methods=["GET","POST"])
+def delete_question(question_id):
+    data_manager.delete_row("answer", "question_id", question_id)
+    data_manager.delete_row("question", "id", question_id)
+    return redirect(url_for("list_route"))
+
+@app.route("/<question_id>/answer/<answer_id>/delete")
+def delete_answer(answer_id, question_id):
+    data_manager.delete_row("answer", "id", answer_id )
+    return redirect(url_for('question_route' , id=question_id))
+
+@app.route("/<question_id>/answer/<answer_id>/edit", methods=["GET", "POST"])
+def edit_answer(answer_id, question_id):
+    if request.method == "GET":
+        answer = utility.get_answer(answer_id,question_id)
+        return render_template("edit-answer.html", answer=answer, question_id=question_id)
+    elif request.method == "POST":
+        message=request.form['message']
+        data_manager.update_answer(answer_id, message)
+        return redirect(url_for('question_route', id=question_id))
+
+@app.route('/answer/<answer_id>/new-comment', methods=['GET','POST'])
+def add_comment_to_answer(answer_id):
+    if request.method == 'GET':
+        return render_template('add_coment_to_answer.html', answer_id=answer_id)
+    if request.method == "POST":
+        data_manager.add_comment_ans(answer_id, request.form['comment_answer'])
+        return redirect(url_for('question_route', id=answer_route))
+    return render_template('question-page.html')
+
+
+
+@app.route("/question/<question_id>/new_comment", methods=["GET", "POST"])
+def question_comment_route(question_id):
+    if request.method == "GET":
+        return render_template("add-question-comment.html")
+
 
 
 if __name__ == "__main__":

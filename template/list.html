@@ -7,8 +7,24 @@
 </head>
 <body>
 {% block content %}
-<table>
+<form action="{{url_for('list_route')}}" method="post">
+    <select name="sort_by" class="sort-by">
+        <option>Title</option>
+        <option>Submission time</option>
+        <option>Message</option>
+        <option>Views</option>
+        <option>Votes</option>
+    </select>
+    <select name="direction" class="sort-by">
+        <option>ASC</option>
+        <option>DESC</option>
+    </select>
+    <input type="submit" name="Submit" value="Order" class="order-button">
+</form>
+
+<table class="forum-table">
     <thead>
+        <div>
     <tr>
         {% for header in fieldnames %}
         <th>
@@ -42,9 +58,10 @@
 
     </tbody>
 </table>
+</div>
 <div>
     <a href="{{url_for('add_question_route')}}">
-    <button type="button" > Add question </button>
+    <button type="button" class="button-add-question"> Add question </button>
     </a>
 </div>
 {% endblock %}

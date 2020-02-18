@@ -3,10 +3,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>LOGOS AskMate</title>
 </head>
 <body>
-<h1>Halloooo</h1>
+{% block content%}
+<div class = "home-text">
+    <h1 class="home-title">
+        Welcome to LOGOS AskMate
+    </h1>
+    <h2 class="home-text">
+        AskMate is an application build for programmers to help each other with different coding problems.<br>
+        We all know coding can become hard sometimes and the best solution is to get help by other people.<br>
+        On this website you can post questions, upvote and downvote them, upload images and comment on other people's posts.
+    </h2>
+</div>
+<table>
+    <tbody>
+    {% for question in latest_questions %}
+        <tr class="home-tr">
+            <td>{{question['submission_time']}}</td>
+            <td>{{question['view_number']}}</td>
+            <td>{{question['vote_number']}}</td>
+            <td>{{question['title']}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div>
 
+</div>
+
+<img src="../static/images/123535.png" class="review-image" width="430" height="230">
+<img src="../static/images/34523462.png" class="review-image" width="430" height="230">
+<img src="../static/images/45734573457.png" class="review-image" width="430" height="230">
+{% endblock %}
 </body>
 </html>
