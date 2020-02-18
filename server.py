@@ -94,10 +94,7 @@ def edit_answer(answer_id, question_id):
 @app.route("/question/<question_id>/new_comment", methods=["GET", "POST"])
 def question_comment_route(question_id):
     if request.method == "GET":
-        return render_template("add-question-comment.html")
-
-
-
+        return render_template("add-question-comment.html", question_id=question_id)
 
 if __name__ == "__main__":
     app.run(debug=True,
