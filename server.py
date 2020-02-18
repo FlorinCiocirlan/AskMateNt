@@ -72,6 +72,7 @@ def edit_route(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET","POST"])
 def delete_question(question_id):
+    data_manager.delete_row("comment", "question_id", question_id)
     data_manager.delete_row("answer", "question_id", question_id)
     data_manager.delete_row("question", "id", question_id)
     return redirect(url_for("list_route"))
@@ -95,6 +96,41 @@ def edit_answer(answer_id, question_id):
 def question_comment_route(question_id):
     if request.method == "GET":
         return render_template("add-question-comment.html", question_id=question_id)
+    elif request.method == "POST":
+        message=request.form['question-comment']
+        question_id=question_id
+        data_manager.add_question_comment(question_id,message)
+        return redirect(url_for("question_route",id=question_id))
+
+@app.route("/comments/<comment_id>/delete")
+def delete_question_comments(comment_id):
+    table = "comment"
+    column = "id"
+    question_id=data_manager.get_questionId_by_commentId(comment_id)
+    data_manager.delete_row(table, column, comment_id)
+    return redirect(url_for('question_route', id=question_id))
+
+@app.route("/comment/<comment_id>/edit", methods=["GET","POST"])
+def edit_comment(comment_id):
+    question_id = data_manager.get_questionId_by_commentId(comment_id)
+    comment = data_manager.get_comment(question_id, comment_id)
+    if request.method == "GET":
+        return render_template("edit-comment.html", comment=comment)
+    elif request.method == "POST":
+        edited_comment = request.form['comment']
+        data_manager.update_comment(edited_comment, comment_id)
+        return redirect(url_for('question_route', id=question_id))
+
+@app.route("/question/<question_id>/vote_up")
+def question_vote_up(question_id):
+    data_manager.vote_question_up(question_id)
+    return redirect(url_for('question_route', id=question_id))
+
+@app.route("/question/<question_id>/vote_down")
+def question_vote_down(question_id):
+    data_manager.vote_question_down(question_id)
+    return redirect(url_for('question_route', id=question_id))
+
 
 if __name__ == "__main__":
     app.run(debug=True,

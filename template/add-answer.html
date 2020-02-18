@@ -7,15 +7,15 @@
 </head>
 <body>
 {% block content %}
-<div class="add-question-content">
-<form action = "{{url_for('answer_route', question_id=question_id )}}" method="post">
-        <p class="answer-title">Comment</p>
-        <textarea name= "message" required rows="5" cols="42"></textarea>
-        <div>
-        <input type="submit" value="Leave comment" name="submit-button" class="button" id="upload-button">
-        </div>
-</form>
-</div>
+    <div class="add-question-content">
+        <form action = "{{url_for('answer_route', question_id=question_id )}}" method="post">
+            <p class="answer-title">Answer</p>
+            <textarea name= "message" required rows="5" cols="42"></textarea>
+            <div>
+                <input type="submit" value="Leave answer" name="submit-button" class="button" id="upload-button">
+            </div>
+        </form>
+    </div>
 {% endblock %}
 </body>
 </html>

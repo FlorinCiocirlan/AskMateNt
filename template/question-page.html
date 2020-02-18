@@ -7,29 +7,59 @@
 </head>
 <body>
 {% block content %}
-<div class="delete-edit-question">
-    <div>
-        <a href="{{url_for('question_comment_route', question_id=question_id)}}">Add comment</a>
-    </div>
-    <div class="buttons">
-    <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
-    <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
-    </div>
+    <div class="delete-edit-question">
+        <div class="d-flex">
+            <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
+            <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
+            <a href="{{url_for('question_comment_route', question_id=question_id)}}" class="ml-auto" id="add-comment-question">Add comment</a>
+        </div>
         <span id="q-title">{{to_display['title']}}</span>
         <span id="q-message">{{to_display['message']}}</span>
-    <div class="stats">
-        <span id="q-vote">{{to_display['vote_number']}}</span>
-        <span id="q-view"> Views:{{to_display['view_number']}}</span>
-        <span id="q-submission-time">{{to_display['submission_time']}}</span>
+        <div class="d-flex">
+            <div class="d-inline">
+                <a href="{{url_for('question_vote_up', question_id=to_display['id'])}}" style="text-decoration: none" class="d-inline align-top">
+                    <img src="{{url_for('static', filename='images/vote_up.png')}}" alt="vote_up" height="20px" width="20px" >
+                </a>
+                <span class="m-1 d-inline align-middle" id="q-vote">{{to_display['vote_number']}}</span>
+                <a href="{{url_for('question_vote_down', question_id=to_display['id'])}}" class="mr-5 d-inline align-middle">
+                    <img src="{{url_for('static', filename='images/vote_down.png')}}" alt="vote_down" height="20" width="20px">
+                </a>
+            </div>
+            <div class="d-inline">
+                <img src="{{url_for('static', filename='images/eye.png')}}" alt="views" width="18px" height="18px" class="d-inline align-middle">
+                <span class="align-middle" id="q-view">{{to_display['view_number']}}</span>
+            </div>
+            <span class="ml-auto" id="q-submission-time">{{to_display['submission_time']}}</span>
+
+        </div>
     </div>
 
-</div>
-
 <div class="question-comments">
-    <a data-toggle="collapse" data-target="#content" class="see-comments d-flex flex-row-reverse">See comments</a>
+    <div class="d-flex flex-row-reverse">
+        <a data-toggle="collapse" data-target="#content" class="see-comments w-25">See comments</a>
+    </div>
     <div id="content" class="collapse">
-    <p>{{comments['message']}}</p>
-        <p>{{comments['submission_time']}}</p>
+            {% for row in comments %}
+                <div class="individual-comment p-2">
+                    <p>{{row['message']}}</p>
+                    <div class="d-flex">
+                        <a href="{{url_for('delete_question_comments', comment_id=row['id'])}}" onclick="return confirm('Are you sure you want to Remove?');">
+                            <img src="{{url_for('static', filename='images/trash_empty.png')}}" alt="trash" width="23px" height="23px">
+                        </a>
+                        <div class="d-inline">
+                            <a href="{{url_for('edit_comment', comment_id=row['id'])}}" class="ml-1">
+                                <img src="{{url_for('static', filename='images/edit.png')}}" alt="edit" width="20px" height="20px">
+                            </a>
+                            {% if row['edited_count']%}
+                            <span class="align_middle" id="q-view">{{row['edited_count']}}</span>
+                            {% else %}
+                            <span class="align_middle" id="q-view">0</span>
+                            {% endif %}
+                        </div>
+                        <span class="ml-auto">{{row['submission_time']}}</span>
+                    </div>
+                </div>
+            {% endfor %}
     </div>
 </div>
 
@@ -39,21 +69,21 @@
             Add answer
         </a>
     </p>
-<div>
-    {% for answers in answers_to_display%}
-    <div class="question-answers">
-    <div class="buttons">
-    <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">Delete answer</a></span>
-    <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}" id="edit-answer">Edit answer</a></span>
+    <div>
+        {% for answers in answers_to_display%}
+            <div class="question-answers">
+                <div class="buttons d-flex p-1">
+                    <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">Delete answer</a></span>
+                    <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}" id="edit-answer">Edit answer</a></span>
+                </div>
+                <span class="p-1" id="answer-message">{{answers['message']}}</span>
+                <div class="answer-stats">
+                    <span id="answer-vote">{{answers['vote_number']}}</span>
+                    <span id="answer-submission">{{answers['submission_time']}}</span>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    <span id="answer-message">{{answers['message']}}</span>
-    <div class="answer-stats">
-    <span id="answer-vote">{{answers['vote_number']}}</span>
-    <span id="answer-submission">{{answers['submission_time']}}</span>
-        </div>
-        </div>
-    {% endfor %}
-</div>
 </div>
 
 {% endblock %}

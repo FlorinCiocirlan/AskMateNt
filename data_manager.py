@@ -27,10 +27,20 @@ def get_all_question_comments(cursor):
 
 def get_question_comments(id):
     comments = get_all_question_comments()
-    for comment in comments:
-        if int(comment['question_id']) == int(id):
+    list_with_comments = [comment for comment in comments if int(comment['question_id']) == int(id)]
+    return list_with_comments
+
+def get_comment(question_id, comment_id):
+    question_comments = get_question_comments(question_id)
+    for comment in question_comments:
+        if int(comment['id']) == int(comment_id):
             return comment
 
+def get_questionId_by_commentId(comment_id):
+    all_comments = get_all_question_comments()
+    for comment in all_comments:
+        if int(comment['id']) == int(comment_id):
+            return comment['question_id']
 
 @connection.connection_handler
 def add_question(cursor, title, message):
@@ -73,6 +83,18 @@ def get_question(cursor, question_id):
     question = cursor.fetchone()
     return question
 
+@connection.connection_handler
+def vote_question_up(cursor, question_id):
+    question = get_question(question_id)
+    new_vote = question['vote_number'] + 1
+    cursor.execute(f"""UPDATE question SET vote_number = {new_vote} WHERE id={question_id}""")
+
+@connection.connection_handler
+def vote_question_down(cursor, question_id):
+    question = get_question(question_id)
+    new_vote = question['vote_number'] - 1
+    cursor.execute(f"""UPDATE question SET vote_number = {new_vote} WHERE id={question_id}""")
+
 
 @connection.connection_handler
 def get_all_answers(cursor, question_id):
@@ -92,6 +114,33 @@ def update_answer(cursor, answer_id, message):
     cursor.execute(f"""UPDATE answer SET message = '{message}' WHERE id={answer_id};""")
 
 @connection.connection_handler
-def delete_row(cursor, table, identifier, question_id):
-    cursor.execute(f"""DELETE FROM {table} WHERE {identifier} = {question_id}; """)
+def delete_row(cursor, table, column, id):
+    cursor.execute(f"""DELETE FROM {table} WHERE {column} = {id}; """)
+
+
+@connection.connection_handler
+def update_comment(cursor, edited_comment, comment_id):
+    new_date = utility.get_date()
+    edited_count = update_edited_count(comment_id)
+    cursor.execute(f"""UPDATE comment SET message = '{edited_comment}', edited_count = '{edited_count}', submission_time = '{new_date}' WHERE id='{comment_id}';""")
+
+def update_edited_count(comment_id):
+    comments = get_all_question_comments()
+    for comment in comments:
+        if int(comment['id']) == int(comment_id):
+            edited_count = comment['edited_count']
+    if edited_count:
+        return edited_count + 1
+    else:
+        return 1
+
+
+@connection.connection_handler
+def add_question_comment(cursor, question_id,message):
+    id = utility.generate_comment_id()
+    question_id=question_id
+    message=message
+    submission_time=utility.get_date()
+    cursor.execute(f"""INSERT INTO comment VALUES('{id}', '{question_id}', NULL, '{message}', '{submission_time}');""")
+
 
