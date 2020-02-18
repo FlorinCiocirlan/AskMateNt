@@ -30,8 +30,7 @@ def generate_comment_id(cursor):
     dict_with_ids = cursor.fetchall()
     for row in dict_with_ids:
         list_of_ids.append(int(row['id']))
-    return max(list_of_ids) + 1
-
+        return max(list_of_ids) + 1
 
 
 @connection.connection_handler
@@ -56,6 +55,7 @@ def get_answer(answer_id, question_id):
     for answer in data_manager.get_all_answers(question_id):
         if int(answer['id']) == int(answer_id):
             return answer
+
 
 
 

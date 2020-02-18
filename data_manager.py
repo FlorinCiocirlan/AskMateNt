@@ -95,3 +95,20 @@ def update_answer(cursor, answer_id, message):
 def delete_row(cursor, table, identifier, question_id):
     cursor.execute(f"""DELETE FROM {table} WHERE {identifier} = {question_id}; """)
 
+@connection.connection_handler
+def get_comment(cursor, answer_id):
+    cursor.execute("""SELECT * FROM comment WHERE answer_id=%(answer_id)s;""",
+                   {'answer_id': answer_id}
+                   )
+    comment = cursor.fetchall()
+    return comment
+
+@connection.connection_handler
+def add_comment_ans(cursor, answer_id, message):
+    id = utility.generate_comment_id()
+    question_id = 1
+    answer_id = answer_id
+    message = message
+    submission_time = utility.get_date()
+    edited_count = 0
+    cursor.execute(f"""INSERT INTO comment VALUES({id},{question_id}, {answer_id}, '{message}', {submission_time}, {edited_count});""")

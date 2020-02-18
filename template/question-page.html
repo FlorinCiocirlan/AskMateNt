@@ -41,6 +41,22 @@
     </p>
 <div>
     {% for answers in answers_to_display%}
+    <p class="answer">
+    <span>{{answers['submission_time']}}</span>
+    <span>{{answers['message']}}</span>
+    <span>{{answers['vote_number']}}</span>
+    <span>
+        <a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">
+        Delete answer
+        </a>
+    </span>
+    <span>
+        <a href="{{url_for('add_comment_to_answer', answer_id=answers['id'])}}" id="comment_answer">
+            Add comment
+        </a>
+    </span>
+
+    </p>
     <div class="question-answers">
     <div class="buttons">
     <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">Delete answer</a></span>

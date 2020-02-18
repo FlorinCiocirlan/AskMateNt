@@ -91,6 +91,17 @@ def edit_answer(answer_id, question_id):
         data_manager.update_answer(answer_id, message)
         return redirect(url_for('question_route', id=question_id))
 
+@app.route('/answer/<answer_id>/new-comment', methods=['GET','POST'])
+def add_comment_to_answer(answer_id):
+    if request.method == 'GET':
+        return render_template('add_coment_to_answer.html', answer_id=answer_id)
+    if request.method == "POST":
+        data_manager.add_comment_ans(answer_id, request.form['comment_answer'])
+        return redirect(url_for('question_route', id=answer_route))
+    return render_template('question-page.html')
+
+
+
 @app.route("/question/<question_id>/new_comment", methods=["GET", "POST"])
 def question_comment_route(question_id):
     if request.method == "GET":
