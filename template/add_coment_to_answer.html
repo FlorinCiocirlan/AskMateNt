@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Now you can add a comment to answer:):)</h1>
+    <h2>Good luck!!</h2>
+        <p>Be careful what you write!</p>
+
+<form action="{{url_for('add_comment_to_answer', answer_id=answer_id)}}" method="post"">
+    <textarea name="comment_answer" rows="5" cols="50" required></textarea>
+    <input type="submit" value="Add comment" name="submit-button">
+</form>
+
+</body>
+</html>
