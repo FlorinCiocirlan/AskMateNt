@@ -7,6 +7,29 @@ def get_all_questions(cursor):
     data = cursor.fetchall()
     return data
 
+def question_search_result(search_phrase):
+    splited_search_phrase=search_phrase.split()
+    all_questions = get_all_questions()
+
+    for word in list(splited_search_phrase):
+        print(word, splited_search_phrase, word)
+        if len(word) < 3:
+            splited_search_phrase.remove(word)
+
+    questions_keyword_list = []
+    for question in all_questions:
+        if any( word.lower() in question['title'].lower() or word in question['message'].lower() for word in splited_search_phrase ):
+            questions_keyword_list.append(question)
+    return questions_keyword_list
+
+def answer_search_result(search_phrase):
+    all_answers=get_every_answer()
+    answers_keyword_list = []
+    for answer in all_answers:
+        if search_phrase in answer['message']:
+            answers_keyword_list.append(answer)
+    return answers_keyword_list
+
 def get_latest_questions():
     list_latest_questions = []
     latest_questions = get_all_questions()
@@ -103,6 +126,12 @@ def get_all_answers(cursor, question_id):
                    )
     answer = cursor.fetchall()
     return answer
+
+@connection.connection_handler
+def get_every_answer(cursor):
+    cursor.execute("""SELECT * FROM answer""")
+    answers = cursor.fetchall()
+    return answers
 
 
 @connection.connection_handler

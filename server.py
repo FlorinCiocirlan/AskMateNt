@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'static/images'
 
-app = Flask(__name__, template_folder="template", static_folder="static", )
+app = Flask(__name__, template_folder="template", static_folder="static")
 app.config['UPLOAD_FOLDER'] = "static/images/"
 
 
@@ -131,6 +131,12 @@ def question_vote_down(question_id):
     data_manager.vote_question_down(question_id)
     return redirect(url_for('question_route', id=question_id))
 
+@app.route("/search", methods=['GET','POST'])
+def search_route():
+    search_phrase=request.args.get('q')
+    keyword_questions = data_manager.question_search_result(search_phrase)
+    keyword_answers = data_manager.answer_search_result(search_phrase)
+    return render_template("results-page.html", question_results=keyword_questions, answer_results=keyword_answers, phrase=search_phrase)
 
 if __name__ == "__main__":
     app.run(debug=True,

@@ -201,11 +201,11 @@ a {
 
 
 .question-answers {
-    margin-left: 5%;
-    margin-right: 5%;
     margin-bottom: 1%;
-    background-color: #c0c0c7;
-    border: 2px solid #c0c0c7;
+    margin-left: 10%;
+    margin-right: 10%;
+    background-color: #ffffff;
+    border: 2px solid #ffffff;
     border-radius: 30px;
     border-collapse: collapse;
 }
@@ -333,4 +333,9 @@ a {
 
 .add-question-content {
     padding: 30px 30px 30px 30px;
+}
+
+
+#highlight {
+    background-color:yellow;
 }
