@@ -34,9 +34,14 @@ def list_route():
 def question_route(id):
     question = data_manager.get_question(id)
     answers = data_manager.get_all_answers(id)
-    comments = data_manager.get_question_comments(id)
-    return render_template("question-page.html", to_display=question, answers_to_display=answers, question_id=id, comments=comments)
+    question_comments = data_manager.get_question_comments(id)
+    # comments = utility.get_comments()
 
+
+    # answer_id = utility.answer_comment_id()
+    # answer_comments = data_manager.get_answer_comments(answer_id)
+    # '''sa fac o functie care sa mi returneze id de comentarii pentru pentru raspunsuri'''
+    return render_template("question-page.html", to_display=question, answers_to_display=answers, question_id=id, comments=question_comments)
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question_route():
@@ -44,12 +49,6 @@ def add_question_route():
         data_manager.add_question(request.form['title'], request.form['message'])
         return redirect("list")
     return render_template("add-question.html")
-
-
-@app.route("/question/<id>/new-answer" ,methods=["GET", "POST"])
-def answer_route(id):
-    id = utility.display_question("id")
-    return render_template("add-answer.html")
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
@@ -103,7 +102,7 @@ def add_comment_to_answer(answer_id):
         return render_template('add_coment_to_answer.html', answer_id=answer_id)
     if request.method == "POST":
         data_manager.add_comment_ans(answer_id, request.form['comment_answer'])
-        return redirect(url_for('question_route', id=answer_route))
+        return redirect(url_for('question_route', id=answer_id))
     return render_template('question-page.html')
 
 
@@ -111,8 +110,7 @@ def add_comment_to_answer(answer_id):
 @app.route("/question/<question_id>/new_comment", methods=["GET", "POST"])
 def question_comment_route(question_id):
     if request.method == "GET":
-        return render_template("add-question-comment.html")
-
+         return render_template("add-question-comment.html", question_id=question_id)
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ import connection, data_manager
 # Returns an integer
 
 @connection.connection_handler
-def generate_question_id(cursor,):
+def generate_question_id(cursor):
     cursor.execute("""SELECT id FROM question;""")
     list_of_ids = []
     dict_with_ids = cursor.fetchall()
@@ -15,7 +15,7 @@ def generate_question_id(cursor,):
     return max(list_of_ids) + 1
 
 @connection.connection_handler
-def generate_answer_id(cursor,):
+def generate_answer_id(cursor):
     cursor.execute("""SELECT id FROM answer;""")
     list_of_ids = []
     dict_with_ids = cursor.fetchall()
@@ -25,12 +25,12 @@ def generate_answer_id(cursor,):
 
 @connection.connection_handler
 def generate_comment_id(cursor):
-    cursor.execute("""SELECT id FROM comment;""")
-    list_of_ids = []
-    dict_with_ids = cursor.fetchall()
-    for row in dict_with_ids:
-        list_of_ids.append(int(row['id']))
-    return len(list_of_ids) + 1
+    cursor.execute("""SELECT id FROM comment ORDER BY id DESC;""")
+    current_max = cursor.fetchone()
+    return current_max['id'] + 1
+    # for row in dict_with_ids:
+    #     list_of_ids.append(int(row['id']))
+    #     return max(list_of_ids) + 1
 
 
 @connection.connection_handler
@@ -57,7 +57,28 @@ def get_answer(answer_id, question_id):
             return answer
 
 
+# @connection.connection_handler
+# def answer_comment_id(cursor):
+#     cursor.execute("""SELECT id FROM answer;""")
+#     current_max = cursor.fetchall()
+#     lst=[]
+#     for row in current_max:
+#         lst.append(int(row['id']))
+#     return lst
+#     # for answer_id in lst:
+#     #     return answer_id
+#
+#
+# print(answer_comment_id())
 
+@connection.connection_handler
+def get_comments(cursor, answer_id):
+    query = """SELECT * from comment
+                WHERE answer_id=%(answer_id)s;"""
+    data = {
+        "answer_id": answer_id
+    }
+    cursor.execute(query, data)
+    return cursor.fetchall()
 
-
-
+print(get_comments(1))

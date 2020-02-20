@@ -39,22 +39,11 @@
             Add answer
         </a>
     </p>
-<div>
-    {% for answers in answers_to_display%}
-    <p class="answer">
-    <span>{{answers['submission_time']}}</span>
-    <span>{{answers['message']}}</span>
-    <span>{{answers['vote_number']}}</span>
-    <span>
-        <a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">
-        Delete answer
-        </a>
-    </span>
-    <span>
+    {% for answers in answers_to_display %}
+
         <a href="{{url_for('add_comment_to_answer', answer_id=answers['id'])}}" id="comment_answer">
             Add comment
         </a>
-    </span>
 
     </p>
     <div class="question-answers">
@@ -68,10 +57,15 @@
     <span id="answer-submission">{{answers['submission_time']}}</span>
         </div>
         </div>
+    <div class="answer-comments">
+    <a data-toggle="collapse" data-target="#comment" class="see-comments d-flex flex-row-reverse">See answer comments</a>
+    <div id="comment" class="collapse">
+        <p>{{}}</p>
+        <p>{{}}</p>
+    </div>
+</div>
     {% endfor %}
 </div>
-</div>
-
 {% endblock %}
 </body>
 </html>
