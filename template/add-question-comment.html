@@ -1,4 +1,4 @@
-{% extends 'layout.html'%}
+{% extends 'layout.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +7,15 @@
 </head>
 <body>
 {% block content%}
-<form action="{{url_for('question_comment_route', question_id=question_id)}}" method="POST">
-    <label>Comment</label>
-    <textarea name="question-comment" rows="5" cols="35"></textarea>
-    <input type="submit" value="submit">
-</form>
+    <div class="add-question-content">
+        <form action="{{url_for('question_comment_route', question_id=question_id)}}" method="POST">
+            <label class="answer-title">Comment</label>
+            <textarea name="question-comment" rows="5" cols="35"></textarea>
+            <div>
+                <input type="submit" value="submit" class="button">
+            </div>
+        </form>
+    </div>
 {% endblock %}
 </body>
 </html>

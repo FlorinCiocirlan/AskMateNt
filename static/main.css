@@ -6,10 +6,6 @@ body {
 }
 
 
-.add-question-content {
-    padding: 30px 30px 30px 30px;
-}
-
 .about-div {
     padding: 100px 400px 30px 400px;
     color: #484848;
@@ -40,7 +36,8 @@ body {
 
 .button{
     background-color: #4CAF50;
-    border: none;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
     color: white;
     padding: 15px 32px;
     text-align: center;
@@ -53,9 +50,10 @@ body {
 
 .button-add-question {
     background-color: #4CAF50;
-    border: none;
+    border: 1px solid #4CAF50;
+    border-radius: 20px;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -146,8 +144,8 @@ a {
 }
 
 #delete {
-    background-color: #ff3a3d;
-    border: 5px solid #ff3a3d;
+    background-color: #ed484a;
+    border: 5px solid #ed484a;
     border-radius: 10px;
     font-size: 10px;
     color: white;
@@ -160,8 +158,8 @@ a {
 }
 
 #edit {
-    background-color: #4CAF50;
-    border: 5px solid #4CAF50;
+    background-color: #4b914b;
+    border: 5px solid #4b914b;
     border-radius: 10px;
     font-size: 10px;
     color: white;
@@ -174,8 +172,8 @@ a {
 }
 
 #add-comment {
-    background-color: #4CAF50;
-    border: 5px solid #4CAF50;
+    background-color: #4b914b;
+    border: 5px solid #4b914b;
     border-radius: 10px;
     font-size: 13px;
     color: #ffffff;
@@ -183,8 +181,8 @@ a {
 }
 
 #delete-answer {
-    background-color: #ff3a3d;
-    border: 7px solid #ff3a3d;
+    background-color: #ed484a;
+    border: 7px solid #ed484a;
     border-radius: 10px;
     font-size: 10px;
     color: white;
@@ -193,8 +191,8 @@ a {
 }
 
 #edit-answer {
-    background-color: #4CAF50;
-    border: 7px solid #4CAF50;
+    background-color: #4b914b;
+    border: 7px solid #4b914b;
     border-radius: 10px;
     font-size: 10px;
     color: white;
@@ -203,11 +201,11 @@ a {
 
 
 .question-answers {
-    margin-left: 5%;
-    margin-right: 5%;
     margin-bottom: 1%;
-    background-color: #c0c0c7;
-    border: 2px solid #c0c0c7;
+    margin-left: 10%;
+    margin-right: 10%;
+    background-color: #ffffff;
+    border: 2px solid #ffffff;
     border-radius: 30px;
     border-collapse: collapse;
 }
@@ -218,12 +216,17 @@ a {
 }
 .order-button{
     background-color: #4CAF50;
+    border: 1px solid #4CAF50;
+    border-radius: 20px;
     color: white;
+    font-size: 12px;
 }
 
 .answer-title{
     font-size: 25px;
     font-weight: normal;
+    text-align: center;
+    display: block;
 }
 
 #q-submission-time {
@@ -255,12 +258,7 @@ a {
     position: relative;
     font-size: 13px;
     font-weight: bold;
-}
-
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    width: fit-content;
+    line-height: 18px;
 }
 
 .stats{
@@ -301,10 +299,43 @@ a {
     margin-top: 3%;
     margin-right: 1%;
     margin-left: 1%;
-    margin-bottom: 2%;
+    margin-bottom: 1%;
 }
 
 .question-comments {
     margin-left: 2%;
     margin-right: 2%;
+}
+
+.individual-comment {
+    background-color: #fff;
+    border: 2px solid #079992;
+    border-radius: 5px;
+    margin: 1%;
+    border-collapse: collapse;
+}
+
+.see-comments {
+    cursor:pointer;
+}
+
+#add-comment-question {
+    text-decoration: none;
+    background-color: #eabc50;
+    color:#FFF;
+    border: 5px solid #eabc50;
+    border-radius: 10px;
+    font-size: 10px;
+    vertical-align: center;
+    height: fit-content;
+    width: fit-content;
+}
+
+.add-question-content {
+    padding: 30px 30px 30px 30px;
+}
+
+
+#highlight {
+    background-color:yellow;
 }
