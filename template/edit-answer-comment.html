@@ -8,7 +8,7 @@
 <body>
 {% block content %}
 <div>
-    <form action="{{url_for('edit_comment', comment_id=comment['id'])}}" method="POST">
+    <form action="{{url_for('edit_answer_comment', comment_id=comment['id'])}}" method="POST">
         <label class="answer-title">Edit comment</label>
         <textarea name="comment" minlength="5" rows="5" cols="35">{{comment['message']}}</textarea>
         <div>

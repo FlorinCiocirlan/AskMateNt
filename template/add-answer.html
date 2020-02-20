@@ -1,21 +1,13 @@
 {% extends 'question-page.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 {% block content %}
+
     <div class="add-question-content">
-        <form action = "{{url_for('answer_route', question_id=question_id )}}" method="post">
+        <form action="{{url_for('answer_route', question_id=question_id )}}" method="post">
             <p class="answer-title">Answer</p>
-            <textarea name= "message" required rows="5" cols="42"></textarea>
+            <textarea cols="42" name="message" required rows="5"></textarea>
             <div>
-                <input type="submit" value="Leave answer" name="submit-button" class="button" id="upload-button">
+                <input class="button" id="upload-button" name="submit-button" type="submit" value="Leave answer">
             </div>
         </form>
     </div>
 {% endblock %}
-</body>
-</html>
