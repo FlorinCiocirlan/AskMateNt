@@ -7,39 +7,76 @@
 </head>
 <body>
 {% block content %}
-<div class="text">
-    <p>
-{% for data in to_display.values() %}
-        <span>{{data}}</span>
-{% endfor %}
-<div>
-    <a href="{{url_for('delete_question', question_id=question_id)}}">Delete question</a>
+<div class="delete-edit-question">
+    <div>
+        <a href="{{url_for('question_comment_route', question_id=question_id)}}">Add comment</a>
+    </div>
+    <div class="buttons">
+    <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
+    <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
+    </div>
+        <span id="q-title">{{to_display['title']}}</span>
+        <span id="q-message">{{to_display['message']}}</span>
+    <div class="stats">
+        <span id="q-vote">
+            <form class="vote" action="{{url_for('vote_route', question_id=to_display['id'])}}" method="POST">
+                <label for="vote">Upvote or Downvote</label>
+                <input id="vote" name="vote" type="number" min="{{to_display['vote_number'] - 1}}" max="{{to_display['vote_number'] + 1}}" step="1" value="{{to_display['vote_number']}}">
+                <input type="submit" value="Post">
+            </form>
+        </span>
+        <span id="q-view"> Views:{{to_display['view_number']}}</span>
+        <span id="q-submission-time">{{to_display['submission_time']}}</span>
+    </div>
+
 </div>
+
+<div class="question-comments">
+    <a data-toggle="collapse" data-target="#content" class="see-comments d-flex flex-row-reverse">See comments</a>
+    <div id="content" class="collapse">
+    <p>{{comments['message']}}</p>
+        <p>{{comments['submission_time']}}</p>
+    </div>
+</div>
+
+<div>
+    <p>
+        <a href = "{{url_for('answer_route', question_id = question_id)}}" id="add-comment">
+            Add answer
+        </a>
     </p>
 <div>
-    <a href="{{url_for('edit_route', question_id=question_id)}}">Edit question</a>
-</div>
-
-
-</div>
-
-<div>
-
     {% for answers in answers_to_display%}
-    <p>
-    <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}">Delete answer</a></span>
-    <span>{{answers['id']}}</span>
+    <p class="answer">
     <span>{{answers['submission_time']}}</span>
     <span>{{answers['message']}}</span>
     <span>{{answers['vote_number']}}</span>
-
-    </p>
-    {% endfor %}
-    <p>
-        <a href = "{{url_for('answer_route', question_id = question_id)}}">
+    <span>
+        <a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">
+        Delete answer
+        </a>
+    </span>
+    <span>
+        <a href="{{url_for('add_comment_to_answer', answer_id=answers['id'])}}" id="comment_answer">
             Add comment
         </a>
+
+    </span>
+
     </p>
+    <div class="question-answers">
+    <div class="buttons">
+    <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">Delete answer</a></span>
+    <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}" id="edit-answer">Edit answer</a></span>
+    </div>
+    <span id="answer-message">{{answers['message']}}</span>
+    <div class="answer-stats">
+    <span id="answer-vote">{{answers['vote_number']}}</span>
+    <span id="answer-submission">{{answers['submission_time']}}</span>
+        </div>
+        </div>
+    {% endfor %}
+</div>
 </div>
 
 {% endblock %}

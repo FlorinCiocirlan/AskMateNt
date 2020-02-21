@@ -7,13 +7,13 @@
 </head>
 <body>
 {% block content %}
-<div>
+<div class="add-question-content">
 <form action="{{url_for('edit_route', question_id=question_id)}}" method="post">
     <label>Title</label><br>
     <textarea name="title">{{question['title']}}</textarea><br>
     <label>Message</label><br>
     <textarea name="message">{{question['message']}}</textarea><br>
-    <input type="submit" value="Send">
+    <input type="submit" value="Send" class="button" id="upload-button">
 </form>
 </div>
 {% endblock %}
