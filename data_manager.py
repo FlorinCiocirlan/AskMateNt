@@ -81,6 +81,13 @@ def get_questionID_by_answerId(answer_id):
         if int(answer['id']) == int(answer_id):
             return answer['question_id']
 
+def get_answerId_by_questionId(question_id):
+    all_answers=get_every_answer()
+    for answer in all_answers:
+        if int(answer['question_id']) == int(question_id):
+            return answer['id']
+
+
 
 def get_latest_questions():
     list_latest_questions = []
