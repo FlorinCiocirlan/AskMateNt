@@ -8,7 +8,6 @@
     <link rel="shortcut icon" href="../static/images/favicon.ico" />
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/"><img src="{{url_for("static", filename = "images/logo2.png")}}" width="80" height="80" alt="logo"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,10 +25,18 @@
         <a class="nav-link" href="/about">About</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('search_route')}}" method="GET">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+      <div class="d-flex flex-column ml-auto ">
+          <div class="d-inline ml-auto pb-4">
+          <span><a href="{{url_for('register')}}" class="text-decoration-none btn btn-info btn-sm"  style="font-size: 13px" >Register</a></span>
+          <span><a href="{{url_for('login')}}" class="text-decoration-none btn btn-success btn-sm" style="font-size: 13px" >Login</a></span>
+          </div>
+          <div class="mb-3">
+            <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('search_route')}}" method="GET">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+      </div>
   </div>
 </nav>
 

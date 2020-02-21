@@ -1,11 +1,13 @@
-from flask import Flask, request, redirect, render_template, url_for
+from flask import Flask, request, redirect, render_template, url_for,flash
 import connection, data_manager, utility
 import os, sys
 from werkzeug.utils import secure_filename
+from forms import RegistrationForm, LoginForm
 
 UPLOAD_FOLDER = 'static/images'
 
 app = Flask(__name__, template_folder="template", static_folder="static")
+app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 app.config['UPLOAD_FOLDER'] = "static/images/"
 
 
@@ -88,7 +90,8 @@ def see_answer_route(answer_id):
 
 @app.route("/<question_id>/answer/<answer_id>/delete")
 def delete_answer(answer_id, question_id):
-    data_manager.delete_row("answer", "id", answer_id )
+    data_manager.delete_row("comment","answer_id",answer_id)
+    data_manager.delete_row("answer", "id", answer_id)
     return redirect(url_for('question_route' , id=question_id))
 
 @app.route("/<question_id>/answer/<answer_id>/edit", methods=["GET", "POST"])
@@ -189,6 +192,27 @@ def search_route():
     keyword_questions = data_manager.question_search_result(search_phrase)
     keyword_answers = data_manager.answer_search_result(search_phrase)
     return render_template("results-page.html", question_results=keyword_questions, answer_results=keyword_answers, phrase=search_phrase)
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('index_route'))
+    return render_template('register.html', title='Register', form=form)
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('index_route'))
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
 
 if __name__ == "__main__":
     app.run(debug=True,
