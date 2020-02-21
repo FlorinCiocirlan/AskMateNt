@@ -48,7 +48,6 @@ def sort_question(cursor, sortby, direction):
     return sorted_question
 
 
-
 def get_date():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

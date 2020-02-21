@@ -138,6 +138,19 @@ def search_route():
     keyword_answers = data_manager.answer_search_result(search_phrase)
     return render_template("results-page.html", question_results=keyword_questions, answer_results=keyword_answers, phrase=search_phrase)
 
+
+@app.route("/answer/<answer_id>/vote_up")
+def answer_vote_up(answer_id):
+    data_manager.vote_answer_up(answer_id)
+    question_id=data_manager.get_questionID_by_answerId(answer_id)
+    return redirect(url_for("question_route",id=question_id))
+
+@app.route("/answer/<answer_id>/vote_down")
+def answer_vote_down(answer_id):
+    data_manager.vote_answer_down(answer_id)
+    question_id=data_manager.get_questionID_by_answerId(answer_id)
+    return redirect(url_for("question_route",id=question_id))
+
 if __name__ == "__main__":
     app.run(debug=True,
             port=5000)
