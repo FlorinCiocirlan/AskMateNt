@@ -282,3 +282,9 @@ def get_all_question_comments(cursor):
     question_comments = cursor.fetchall()
     return question_comments
 
+######################### Experimental functions #################
+@connection.connection_handler
+def delete_q(cursor,question_id):
+    cursor.execute(f"""DELETE FROM comment 
+WHERE comment.question_id or comment.answer_id in (SELECT answer.id , question.id from question, answer
+WHERE answer.question_id = {question_id} and question.id = {question_id})""")

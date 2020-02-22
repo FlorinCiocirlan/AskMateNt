@@ -74,10 +74,6 @@ def edit_route(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET","POST"])
 def delete_question(question_id):
-    answer_id=data_manager.get_answerId_by_questionId(question_id)
-    data_manager.delete_row("comment", "answer_id", answer_id)
-    data_manager.delete_row("comment", "question_id", question_id)
-    data_manager.delete_row("answer", "question_id", question_id)
     data_manager.delete_row("question", "id", question_id)
     return redirect(url_for("list_route"))
 
@@ -90,7 +86,6 @@ def see_answer_route(answer_id):
 
 @app.route("/<question_id>/answer/<answer_id>/delete")
 def delete_answer(answer_id, question_id):
-    data_manager.delete_row("comment","answer_id",answer_id)
     data_manager.delete_row("answer", "id", answer_id)
     return redirect(url_for('question_route' , id=question_id))
 
