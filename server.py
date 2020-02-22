@@ -144,6 +144,7 @@ def edit_comment(comment_id):
         return render_template("edit-comment.html", comment=comment)
     elif request.method == "POST":
         edited_comment = request.form['comment']
+        data_manager.update_edited_count(comment_id)
         data_manager.update_comment(edited_comment, comment_id)
         return redirect(url_for('question_route', id=question_id))
 
@@ -155,7 +156,8 @@ def edit_answer_comment(comment_id):
         return render_template('edit-answer-comment.html', comment=comment)
     elif request.method == "POST":
         edited_comment = request.form['comment']
-        data_manager.answer_update_comment(edited_comment, comment_id)
+        data_manager.update_edited_count(comment_id)
+        data_manager.update_comment(edited_comment, comment_id)
         return redirect(url_for('see_answer_route', answer_id=answer_id))
 
 @app.route("/question/<question_id>/vote_up")
@@ -211,4 +213,5 @@ def login():
 
 if __name__ == "__main__":
     app.run(debug=True,
+            host="0.0.0.0",
             port=5000)

@@ -1,4 +1,5 @@
 import connection, utility
+from psycopg2 import sql
 
 ################# Questions functions ##############################
 
@@ -26,7 +27,12 @@ def vote_question_up(cursor, question_id):
 
 @connection.connection_handler
 def update_question(cursor, table, title, message, question_id):
-    cursor.execute(f"""UPDATE {table} SET title = '{title}', message = '{message}' WHERE id={question_id};""")
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {title} = %s, {message} = %s WHERE {id}=%s;")
+        .format(table=sql.Identifier(table),title=sql.Identifier('title'),message=sql.Identifier('message'),id=sql.Identifier('id')),
+        [title, message, question_id]
+
+        )
 
 @connection.connection_handler
 def add_question_comment(cursor, question_id,message):
@@ -35,7 +41,11 @@ def add_question_comment(cursor, question_id,message):
     message=message
     edited_count = 0
     submission_time=utility.get_date()
-    cursor.execute(f"""INSERT INTO comment VALUES('{id}', '{question_id}', NULL, '{message}','{submission_time}', '{edited_count}');""")
+    cursor.execute(
+        sql.SQL("INSERT INTO {table} VALUES(%s, %s,NULL,%s,%s,%s);")
+            .format(table=sql.Identifier('comment')),
+            [id, question_id, message,submission_time, edited_count]
+    )
 
 
 def get_comment(question_id, comment_id):
@@ -61,10 +71,11 @@ def add_question(cursor, title, message):
     message = message
     image = ''
     cursor.execute(
-        """INSERT INTO question VALUES('{id}','{submission_time}', '{view_number}', '{vote_number}', '{title}', '{message}', '{image}');""".format(
-            id=id, submission_time=submission_time, view_number=view_number, vote_number=vote_number, title=title,
-            message=message, image=image
-        ))
+        sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s,%s,%s,%s,%s);")
+        .format(table=sql.Identifier('question')),
+        [id, submission_time, view_number, vote_number, title, message, image]
+    )
+
 
 
 
@@ -157,14 +168,15 @@ def add_answers(cursor, question_id, message):
     id = utility.generate_answer_id()
     submission_time = utility.get_date()
     vote_number = 0
+    question_id = question_id
     message = message
     image = ''
-    question_id = question_id
     cursor.execute(
-        """INSERT INTO answer VALUES('{id}','{submission_time}', '{vote_number}', '{question_id}', '{message}', '{image}');""".format(
-            id=id, submission_time=submission_time, vote_number=vote_number, question_id=question_id, message=message,
-            image=image
-        ))
+        sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s, %s);")
+            .format(table=sql.Identifier('answer')),
+            [id, submission_time, vote_number, question_id, message, image]
+        )
+
 
 
 @connection.connection_handler
@@ -201,47 +213,40 @@ def get_answer(answer_id):
 
 @connection.connection_handler
 def update_answer(cursor, answer_id, message):
-    cursor.execute(f"""UPDATE answer SET message = '{message}' WHERE id={answer_id};""")
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {message} = %s WHERE {id}=%s;")
+        .format(table=sql.Identifier('answer'),message=sql.Identifier('message'),id=sql.Identifier('id')),
+        [message,answer_id]
+    )
 
 
 @connection.connection_handler
 def delete_row(cursor, table, column, id):
-    cursor.execute(f"""DELETE FROM {table} WHERE {column} = {id}; """)
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {column} = %s;")
+        .format(table=sql.Identifier(table), column=sql.Identifier(column)),
+        [id]
+    )
 
 
 ########################## Comments functions ###########################
+@connection.connection_handler
+def update_edited_count(cursor,comment_id):
+    cursor.execute(
+        sql.SQL("UPDATE comment SET {edited_count}={edited_count} + 1 WHERE {id} = %s;")
+        .format(id=sql.Identifier('id'), edited_count=sql.Identifier('edited_count')),
+        [comment_id]
+    )
 
-def update_edited_count(comment_id):
-    comments = get_all_question_comments()
-    for comment in comments:
-        if int(comment['id']) == int(comment_id):
-            edited_count = comment['edited_count']
-    if edited_count:
-        return edited_count + 1
-    else:
-        return 1
-
-def answer_update_edited_count(comment_id):
-    comments = get_all_answers_comments()
-    for comment in comments:
-        if int(comment['id']) == int(comment_id):
-            edited_count = comment['edited_count']
-    if edited_count:
-        return edited_count + 1
-    else:
-        return 1
 
 @connection.connection_handler
 def update_comment(cursor, edited_comment, comment_id):
     new_date = utility.get_date()
-    edited_count = update_edited_count(comment_id)
-    cursor.execute(f"""UPDATE comment SET message = '{edited_comment}', edited_count = '{edited_count}', submission_time = '{new_date}' WHERE id='{comment_id}';""")
-
-@connection.connection_handler
-def answer_update_comment(cursor, edited_comment, comment_id):
-    new_date = utility.get_date()
-    edited_count = answer_update_edited_count(comment_id)
-    cursor.execute(f"""UPDATE comment SET message = '{edited_comment}', edited_count = '{edited_count}', submission_time = '{new_date}' WHERE id='{comment_id}';""")
+    cursor.execute(
+        sql.SQL("UPDATE comment SET {message} = %s, {submission_time} = %s WHERE {id}=%s;")
+        .format(message=sql.Identifier('message'), submission_time=sql.Identifier('submission_time'), id=sql.Identifier('id')),
+        [edited_comment, new_date, comment_id]
+    )
 
 @connection.connection_handler
 def add_comment_ans(cursor, answer_id, message):
@@ -250,8 +255,11 @@ def add_comment_ans(cursor, answer_id, message):
     message = message
     submission_time = utility.get_date()
     edited_count = 0
-    query = f"""INSERT INTO comment VALUES('{id}', NULL, '{answer_id}', '{message}', '{submission_time}', {edited_count});"""
-    cursor.execute(query)
+    cursor.execute(
+        sql.SQL("INSERT INTO comment VALUES(%s , NULL,  %s , %s, %s, %s);"),
+        [id, answer_id, message, submission_time, edited_count]
+    )
+
 
 
 def get_answer_comment(comment_id):
@@ -282,9 +290,3 @@ def get_all_question_comments(cursor):
     question_comments = cursor.fetchall()
     return question_comments
 
-######################### Experimental functions #################
-@connection.connection_handler
-def delete_q(cursor,question_id):
-    cursor.execute(f"""DELETE FROM comment 
-WHERE comment.question_id or comment.answer_id in (SELECT answer.id , question.id from question, answer
-WHERE answer.question_id = {question_id} and question.id = {question_id})""")
