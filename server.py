@@ -1,8 +1,7 @@
-from flask import Flask, request, redirect, render_template, url_for,flash
+from flask import Flask, request, redirect, render_template, url_for
 import connection, data_manager, utility
 import os, sys
-from werkzeug.utils import secure_filename
-from forms import RegistrationForm, LoginForm
+
 
 UPLOAD_FOLDER = 'static/images'
 
@@ -190,26 +189,6 @@ def search_route():
     keyword_answers = data_manager.answer_search_result(search_phrase)
     return render_template("results-page.html", question_results=keyword_questions, answer_results=keyword_answers, phrase=search_phrase)
 
-
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('index_route'))
-    return render_template('register.html', title='Register', form=form)
-
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
-            flash('You have been logged in!', 'success')
-            return redirect(url_for('index_route'))
-        else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
 
 if __name__ == "__main__":
     app.run(debug=True,
