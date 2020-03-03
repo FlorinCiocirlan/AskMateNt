@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div class="d-flex justify-content-center text-black-50 font-weight bold">
+    <form class="d-flex flex-column w-25 bg-light shadow p-5 mt-5 border rounded" method="POST" action="{{url_for('register')}}">
+        <label>Email Adress</label>
+        <input class="border rounded bg-white" type="email" name="email" pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required placeholder="Ex:myemail@gmail.com">
+        <label>Username</label>
+        <input class="border rounded" type="text" name="username" required minlength="6">
+        <label>Password</label>
+        <input class="border rounded" type="password" name="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" onchange="form.password_two.pattern = this.value;" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required placeholder="Password">
+        <input class="border rounded" type="password" name="password_two" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');" placeholder="Confirm Password" required>
+        <div class="d-flex justify-content-center">
+        <input type="submit" class="btn btn-sm btn-info mt-4 w-50" value="Register">
+        </div>
+        {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mt-2"><span class="text-danger">{{message}}</span></div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="mt-3">
+        <span class="mt-3">Already have an account? </span><span><a href="{{url_for('login')}}">Login</a></span>
+        </div>
+    </form>
+</div>
+{% endblock %}
+</body>
+</html>

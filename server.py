@@ -1,7 +1,6 @@
-from flask import Flask, request, redirect, render_template, url_for
+from flask import Flask, request, redirect, render_template, url_for, session, flash
 import connection, data_manager, utility
 import os, sys
-
 
 UPLOAD_FOLDER = 'static/images'
 
@@ -189,8 +188,43 @@ def search_route():
     keyword_answers = data_manager.answer_search_result(search_phrase)
     return render_template("results-page.html", question_results=keyword_questions, answer_results=keyword_answers, phrase=search_phrase)
 
+@app.route("/register", methods=['GET','POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        username = request.form['username']
+        password = utility.hash_password(request.form['password'])
+        if data_manager.if_already_exist('email',email) or data_manager.if_already_exist('username',username):
+            flash('Username or Email Adress already in use')
+            return render_template('register.html')
+        else:
+            data_manager.insert_user(username, password, email)
+            return redirect(url_for('login'))
+    return render_template("register.html")
+
+@app.route("/login", methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if data_manager.if_already_exist('username', username):
+            hashed_password = data_manager.get_hashed_password(username)
+            if utility.verify_password(password,hashed_password):
+                session['username'] = username
+                flash(f"You are logged in as {username}", "succesful_login")
+                return redirect(url_for('index_route'))
+            else:
+                flash("Invalid username or password","invalid_login")
+        else:
+            flash("Invalid username or password","invalid_login")
+    return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    session.pop('username')
+    return redirect(url_for('index_route'))
 
 if __name__ == "__main__":
     app.run(debug=True,
-            host="0.0.0.0",
+            host='0.0.0.0',
             port=5000)

@@ -290,3 +290,32 @@ def get_all_question_comments(cursor):
     question_comments = cursor.fetchall()
     return question_comments
 
+
+############### User Management ###################
+@connection.connection_handler
+def insert_user(cursor,username,password,email):
+    creation_date = utility.get_date()
+    id=utility.generate_user_id()
+    query=sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s );").format(table=sql.Identifier('users'))
+    cursor.execute(query,[id,username,password,email,creation_date])
+
+@connection.connection_handler
+def if_already_exist(cursor,column,data):
+    query=sql.SQL("SELECT * FROM users")
+    cursor.execute(query)
+    new_data=cursor.fetchall()
+    print(new_data)
+    for row in new_data:
+        print(row[column])
+        if row[column] == data:
+            return True
+
+    return False
+
+@connection.connection_handler
+def get_hashed_password(cursor,username):
+    query=sql.SQL("SELECT * FROM {table} WHERE {column} = %s;").format(table=sql.Identifier('users'), column=sql.Identifier('username'))
+    cursor.execute(query,[username])
+    password = cursor.fetchone()
+    return password['password']
+

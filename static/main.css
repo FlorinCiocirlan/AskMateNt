@@ -145,8 +145,9 @@ a {
 
 #delete {
     background-color: #ed484a;
-    border: 5px solid #ed484a;
-    border-radius: 10px;
+    border: 1px solid #ed484a;
+    border-radius: 5px;
+    padding: 2px;
     font-size: 10px;
     color: white;
     text-decoration: none;
@@ -159,8 +160,10 @@ a {
 
 #edit {
     background-color: #4b914b;
-    border: 5px solid #4b914b;
-    border-radius: 10px;
+    border: 1px solid #4b914b;
+    border-radius: 5px;
+    padding: 2px;
+    margin-left: 3px;
     font-size: 10px;
     color: white;
     text-decoration: none;
@@ -173,8 +176,9 @@ a {
 
 #add-comment {
     background-color: #4b914b;
-    border: 5px solid #4b914b;
-    border-radius: 10px;
+    border: 1px solid #4b914b;
+    border-radius: 5px;
+    padding: 3px;
     font-size: 13px;
     color: #ffffff;
     text-decoration: none;
@@ -182,18 +186,20 @@ a {
 
 #delete-answer {
     background-color: #ed484a;
-    border: 7px solid #ed484a;
-    border-radius: 10px;
+    border: 1px solid #ed484a;
+    border-radius: 5px;
+    padding: 3px;
     font-size: 10px;
     color: white;
     text-decoration: none;
-    margin-left: 15px;
 }
 
 #edit-answer {
     background-color: #4b914b;
-    border: 7px solid #4b914b;
-    border-radius: 10px;
+    border: 1px solid #4b914b;
+    border-radius: 5px;
+    margin-left: 3px;
+    padding: 3px;
     font-size: 10px;
     color: white;
     text-decoration: none;
@@ -323,8 +329,9 @@ a {
     text-decoration: none;
     background-color: #eabc50;
     color:#FFF;
-    border: 5px solid #eabc50;
-    border-radius: 10px;
+    border: 1px solid #eabc50;
+    padding: 3px;
+    border-radius: 5px;
     font-size: 10px;
     vertical-align: center;
     height: fit-content;
@@ -340,3 +347,6 @@ a {
     background-color:yellow;
 }
 
+.register {
+    color: rgba(0, 0, 0, 0.51);
+}

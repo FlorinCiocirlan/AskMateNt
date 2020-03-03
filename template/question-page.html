@@ -7,7 +7,7 @@
 </head>
 <body>
 {% block content %}
-<div class="delete-edit-question">
+<div class="delete-edit-question border rounded p-2">
     <div class="d-flex">
         <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
         <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
@@ -80,7 +80,7 @@
     </p>
     {% for answers in answers_to_display %}
     </p>
-    <div class="question-answers p-1">
+    <div class="question-answers p-1 border rounded">
         <div class="buttons d-flex flex-start">
             <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}"
                      id="delete-answer">Delete answer</a></span>
@@ -95,7 +95,7 @@
                 </a>
             </div>
         </span>
-        <div class="answer-stats d-flex-">
+        <div class="answer-stats m-0">
             <a href="{{url_for('answer_vote_up', answer_id=answers['id'])}}"
                style="text-decoration: none; transform: translateY(-3px); display: inline-block">
                 <img alt="vote_up" height="20px" src="{{url_for('static', filename='images/vote_up.png')}}"
