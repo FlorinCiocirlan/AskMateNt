@@ -7,6 +7,16 @@
 </head>
 <body>
 {% block content %}
+
+{% with messages=get_flashed_messages(category_filter=["no_user"])%}
+    {% if messages %}
+        {% for message in messages%}
+            <script>alert('{{message}}')</script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
 <div class="delete-edit-question border rounded p-2">
     <div class="d-flex">
         <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>

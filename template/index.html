@@ -7,10 +7,10 @@
 </head>
 <body>
 {% block content%}
-{% with messages=get_flashed_messages(category_filter=["succesful_login"])%}
+{% with messages=get_flashed_messages(category_filter=["no_user"])%}
     {% if messages %}
         {% for message in messages%}
-<div class="m-2 d-flex justify-content-center"><span class="bg-transparent border rounded box-shadow text-black-50 h5">{{message}} </span></div>
+<div class="m-2 d-flex justify-content-center"><script>alert('{{message}}')</script></div>
         {% endfor %}
     {% endif %}
 {% endwith %}
