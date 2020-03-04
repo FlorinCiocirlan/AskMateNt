@@ -127,21 +127,6 @@ a {
     background-color: #c1cccc;
 }
 
-.delete-edit-question {
-    box-shadow: 0px 0px 100px white;
-    position: relative;
-    font-family: Ubuntu;
-    background-color: rgb(255, 255, 255);
-    border: 10px solid rgb(255, 255, 255);
-    border-radius: 35px;
-    overflow: visible;
-    color: black;
-    width: auto;
-    margin-left: 2%;
-    margin-top: 2%;
-    margin-right: 2%;
-    height: auto;
-}
 
 #delete {
     background-color: #ed484a;
@@ -206,15 +191,7 @@ a {
 }
 
 
-.question-answers {
-    margin-bottom: 1%;
-    margin-left: 10%;
-    margin-right: 10%;
-    background-color: #ffffff;
-    border: 2px solid #ffffff;
-    border-radius: 30px;
-    border-collapse: collapse;
-}
+
 
 .sort-by{
     background-color: white;
@@ -278,14 +255,12 @@ a {
     margin-left: 1%;
 }
 
-#answer-message {
-    position: relative;
-    font-size: 16px;
-    text-align: center;
-    left: 0px;
-    bottom: 0px;
-    display: block;
-}
+/*#answer-message {*/
+/*    position: relative;*/
+/*    font-size: 16px;*/
+/*    text-align: center;*/
+/*    display: block;*/
+/*}*/
 
 #answer-vote {
     font-size: 13px;

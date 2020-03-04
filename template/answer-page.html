@@ -14,16 +14,16 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center container">
     <div class="bg-light m-3 w-75 rounded p-3">
         <div class="d-flex justify-content-end">
         <a href="{{url_for('add_comment_to_answer', answer_id=answer['id'])}}" id="add-comment-question" >
             Add comment
         </a>
         </div>
-        <span>
+        <p class="text-wrap text-break p-2">
                 {{answer['message']}}
-        </span>
+        </p>
         <div class="answer-stats">
             <span id="answer-vote">{{answer['vote_number']}}</span>
             <span id="answer-submission">{{answer['submission_time']}}</span>

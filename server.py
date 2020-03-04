@@ -73,14 +73,20 @@ def about():
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_route(question_id):
     if session.get('username') is not None:
-        if request.method == "GET":
-            question = data_manager.get_question(question_id)
-            return render_template("edit-question.html", question=question, question_id=question_id)
-        elif request.method == "POST":
-            title=request.form['title']
-            message=request.form['message']
-            data_manager.update_question("question",title,message,question_id)
-            return redirect(url_for('question_route', id=question_id))
+        question_user_id=data_manager.find_userid_by_questionid(question_id)
+        if question_user_id:
+            if session['user_id'] == question_user_id['user_id']:
+                if request.method == "GET":
+                    question = data_manager.get_question(question_id)
+                    return render_template("edit-question.html", question=question, question_id=question_id)
+                elif request.method == "POST":
+                    title=request.form['title']
+                    message=request.form['message']
+                    data_manager.update_question("question",title,message,question_id)
+                    return redirect(url_for('question_route', id=question_id))
+            else:
+                flash("You dont have acces","no_acces")
+                return redirect(url_for('question_route', id=question_id))
     else:
         flash('You must login before using features', 'no_user')
         return redirect(url_for('question_route', id=question_id))
@@ -88,8 +94,14 @@ def edit_route(question_id):
 @app.route("/question/<question_id>/delete", methods=["GET","POST"])
 def delete_question(question_id):
     if session.get('username') is not None:
-        data_manager.delete_row("question", "id", question_id)
-        return redirect(url_for("list_route"))
+        question_user_id=data_manager.find_userid_by_questionid(question_id)
+        if question_user_id:
+            if session['user_id'] == question_user_id['user_id']:
+                data_manager.delete_row("question", "id", question_id)
+                return redirect(url_for("list_route"))
+            else:
+                flash("You dont have acces", "no_acces")
+                return redirect(url_for('question_route', id=question_id))
     else:
         flash('You must login before using features', 'no_user')
         return redirect(url_for('question_route', id=question_id))
@@ -104,8 +116,14 @@ def see_answer_route(answer_id):
 @app.route("/<question_id>/answer/<answer_id>/delete")
 def delete_answer(answer_id, question_id):
     if session.get('username') is not None:
-        data_manager.delete_row("answer", "id", answer_id)
-        return redirect(url_for('question_route' , id=question_id))
+        answer_user_id=data_manager.find_userid_by_answerid(answer_id)
+        if answer_user_id:
+            if session['user_id'] == answer_user_id['user_id']:
+                data_manager.delete_row("answer", "id", answer_id)
+                return redirect(url_for('question_route' , id=question_id))
+            else:
+                flash("You dont have acces", "no_acces")
+                return redirect(url_for('question_route', id=question_id))
     else:
         flash('You must login before using features', 'no_user')
         return redirect(url_for('question_route', id=question_id))
@@ -113,13 +131,20 @@ def delete_answer(answer_id, question_id):
 @app.route("/<question_id>/answer/<answer_id>/edit", methods=["GET", "POST"])
 def edit_answer(answer_id, question_id):
     if session.get('username') is not None:
-        if request.method == "GET":
-            answer = data_manager.get_answer(answer_id)
-            return render_template("edit-answer.html", answer=answer, question_id=question_id)
-        elif request.method == "POST":
-            message=request.form['message']
-            data_manager.update_answer(answer_id, message)
-            return redirect(url_for('question_route', id=question_id))
+        answer_user_id = data_manager.find_userid_by_answerid(answer_id)
+        if answer_user_id:
+            if session['user_id'] == answer_user_id['user_id']:
+                if request.method == "GET":
+                    answer = data_manager.get_answer(answer_id)
+                    return render_template("edit-answer.html", answer=answer, question_id=question_id)
+                elif request.method == "POST":
+                    message=request.form['message']
+                    data_manager.update_answer(answer_id, message)
+                    return redirect(url_for('question_route', id=question_id))
+            else:
+                flash("You dont have acces", "no_acces")
+                return redirect(url_for('question_route', id=question_id))
+
     else:
         flash('You must login before using features', 'no_user')
         return redirect(url_for('question_route', id=question_id))
@@ -157,66 +182,112 @@ def question_comment_route(question_id):
 
 @app.route("/comments/<comment_id>/delete")
 def delete_question_comments(comment_id):
-    table = "comment"
-    column = "id"
-    question_id=data_manager.get_questionId_by_commentId(comment_id)
-    data_manager.delete_row(table, column, comment_id)
-    return redirect(url_for('question_route', id=question_id))
+    question_id = data_manager.get_questionId_by_commentId(comment_id)
+    if session.get('username') is not None:
+        comment_user_id=data_manager.find_userid_by_commentid(comment_id)
+        if comment_user_id:
+            if session['user_id'] == comment_user_id['user_id']:
+                table = "comment"
+                column = "id"
+                data_manager.delete_row(table, column, comment_id)
+                return redirect(url_for('question_route', id=question_id))
+            else:
+                flash("You dont have acces", "no_acces")
+                return redirect(url_for('question_route', id=question_id))
+    else:
+        flash('You must login before using features', 'no_user')
+        return redirect(url_for('question_route', id=question_id))
 
 @app.route("/answer/<comment_id>/delete")
 def delete_answer_comments(comment_id):
-    table = "comment"
-    column = "id"
     answer_id = data_manager.get_answerId_by_commentId(comment_id)
-    data_manager.delete_row(table, column, comment_id)
-    return redirect(url_for('see_answer_route', answer_id=answer_id))
+    if session.get('username') is not None:
+        answer_comment_id=data_manager.find_userid_by_commentid(comment_id)
+        if answer_comment_id:
+            if session['user_id'] == answer_comment_id['user_id']:
+                table = "comment"
+                column = "id"
+                data_manager.delete_row(table, column, comment_id)
+                return redirect(url_for('see_answer_route', answer_id=answer_id))
+            else:
+                flash("You dont have acces", "no_acces")
+                return redirect(url_for('see_answer_route', answer_id=answer_id))
+    else:
+        flash('You must login before using features', 'no_user')
+        return redirect(url_for('see_answer_route', answer_id=answer_id))
 
 
 @app.route("/comment/<comment_id>/edit", methods=["GET","POST"])
 def edit_comment(comment_id):
-    question_id = data_manager.get_questionId_by_commentId(comment_id)
-    comment = data_manager.get_comment(question_id, comment_id)
-    if request.method == "GET":
-        return render_template("edit-comment.html", comment=comment)
-    elif request.method == "POST":
-        edited_comment = request.form['comment']
-        data_manager.update_edited_count(comment_id)
-        data_manager.update_comment(edited_comment, comment_id)
+    question_id=data_manager.get_questionId_by_commentId(comment_id)
+    if session.get('username') is not None:
+        comment_user_id=data_manager.find_userid_by_commentid(comment_id)
+        if comment_user_id:
+            if session['user_id'] == comment_user_id['user_id']:
+                comment = data_manager.get_comment(question_id, comment_id)
+                if request.method == "GET":
+                    return render_template("edit-comment.html", comment=comment)
+                elif request.method == "POST":
+                    edited_comment = request.form['comment']
+                    data_manager.update_edited_count(comment_id)
+                    data_manager.update_comment(edited_comment, comment_id)
+                    return redirect(url_for('question_route', id=question_id))
+            else:
+                flash("You dont have access", "no_acces")
+                return redirect(url_for('question_route', id=question_id))
+    else:
+        flash('You must login before using features', 'no_user')
         return redirect(url_for('question_route', id=question_id))
+
+
 
 @app.route("/answer/<comment_id>/edit", methods=["GET","POST"])
 def edit_answer_comment(comment_id):
-    answer_id = data_manager.get_answerId_by_commentId(comment_id)
-    comment = data_manager.get_answer_comment(comment_id)
-    if request.method == "GET":
-        return render_template('edit-answer-comment.html', comment=comment)
-    elif request.method == "POST":
-        edited_comment = request.form['comment']
-        data_manager.update_edited_count(comment_id)
-        data_manager.update_comment(edited_comment, comment_id)
+    answer_id=data_manager.get_answerId_by_commentId(comment_id)
+    if session.get('username') is not None:
+        comment_user_id=data_manager.find_userid_by_commentid(comment_id)
+        if comment_user_id:
+            if session['user_id'] == comment_user_id['user_id']:
+                comment = data_manager.get_answer_comment(comment_id)
+                if request.method == "GET":
+                    return render_template('edit-answer-comment.html', comment=comment)
+                elif request.method == "POST":
+                    edited_comment = request.form['comment']
+                    data_manager.update_edited_count(comment_id)
+                    data_manager.update_comment(edited_comment, comment_id)
+                    return redirect(url_for('see_answer_route', answer_id=answer_id))
+            else:
+                flash("You dont have access", "no_acces")
+                return redirect(url_for('see_answer_route', answer_id=answer_id))
+    else:
+        flash('You must login before using features', 'no_user')
         return redirect(url_for('see_answer_route', answer_id=answer_id))
 
 @app.route("/question/<question_id>/vote_up")
 def question_vote_up(question_id):
-    data_manager.vote_question_up(question_id)
-    return redirect(url_for('question_route', id=question_id))
+    if session.get['username'] is not None:
+        data_manager.vote_question_up(question_id)
+        return redirect(url_for('question_route', id=question_id))
 
 @app.route("/question/<question_id>/vote_down")
 def question_vote_down(question_id):
-    data_manager.vote_question_down(question_id)
-    return redirect(url_for('question_route', id=question_id))
+    if session.get['username'] is not None:
+        data_manager.vote_question_down(question_id)
+        return redirect(url_for('question_route', id=question_id))
 
 @app.route("/answer/<answer_id>/vote_up")
 def answer_vote_up(answer_id):
-    data_manager.vote_answer_up(answer_id)
-    question_id=data_manager.get_questionID_by_answerId(answer_id)
-    return redirect(url_for("question_route",id=question_id))
+    if session.get['username'] is not None:
+        data_manager.vote_answer_up(answer_id)
+        question_id=data_manager.get_questionID_by_answerId(answer_id)
+        return redirect(url_for("question_route",id=question_id))
 
 @app.route("/answer/<answer_id>/vote_down")
 def answer_vote_down(answer_id):
-    data_manager.vote_answer_down(answer_id)
-    question_id=data_manager.get_questionID_by_answerId(answer_id)
-    return redirect(url_for("question_route",id=question_id))
+    if session.get['username'] is not None:
+        data_manager.vote_answer_down(answer_id)
+        question_id=data_manager.get_questionID_by_answerId(answer_id)
+        return redirect(url_for("question_route",id=question_id))
 
 
 @app.route("/search", methods=['GET','POST'])
@@ -266,5 +337,4 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True,
-            host='0.0.0.0',
             port=5000)
