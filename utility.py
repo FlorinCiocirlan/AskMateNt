@@ -1,6 +1,35 @@
 import connection
 import data_manager
 from datetime import datetime
+import bcrypt
+import re
+
+
+############## Hash password ##################
+def hash_password(plain_text_password):
+    # By using bcrypt, the salt is saved into the hash itself
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+########### Verify password ###############
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
+
+
+@connection.connection_handler
+def generate_user_id(cursor):
+    cursor.execute("""SELECT id FROM users;""")
+    list_with_ids=[]
+    ids=cursor.fetchall()
+    if ids:
+        for id in ids:
+            list_with_ids.append(id['id'])
+        return max(list_with_ids) + 1
+    else:
+        return 1
 
 
 @connection.connection_handler

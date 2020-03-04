@@ -7,12 +7,12 @@
 </head>
 <body>
 {% block content%}
-    <div class="add-question-content">
-        <form action="{{url_for('question_comment_route', question_id=question_id)}}" method="POST">
-            <label class="answer-title">Comment</label>
-            <textarea name="question-comment" rows="5" cols="35"></textarea>
+    <div class="d-flex justify-content-center mt-3 p-3 form-group">
+        <form action="{{url_for('question_comment_route', question_id=question_id)}}" method="POST" class="bg-light border rounded p-3">
+            <label class="h3 text-secondary">Comment</label>
+            <textarea name="question-comment" rows="5" class="border rounded mt-2 form-control"></textarea>
             <div>
-                <input type="submit" value="submit" class="button">
+                <input type="submit" value="submit" class="btn btn-lg btn-success">
             </div>
         </form>
     </div>

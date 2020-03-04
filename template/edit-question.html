@@ -7,13 +7,14 @@
 </head>
 <body>
 {% block content %}
-<div class="add-question-content">
-<form action="{{url_for('edit_route', question_id=question_id)}}" method="post">
-    <label class="answer-title">Title</label><br>
-    <textarea name="title" style="margin-top: -10px; margin-bottom: 2px" >{{question['title']}}</textarea><br>
-    <label class="answer-title">Message</label><br>
-    <textarea name="message" rows="5" cols="35">{{question['message']}}</textarea><br>
-    <input type="submit" value="Send" class="button" id="upload-button">
+<div class="d-flex justify-content-center mt-3">
+<form action="{{url_for('edit_route', question_id=question_id)}}" method="post" class="bg-light p-3 border rounded form-group">
+    <label class="text-secondary h3">Title</label><br>
+    <textarea name="title" class="border rounded mb-2 form-control">{{question['title']}}</textarea><br>
+    <label class="text-secondary h3">Message</label><br>
+    <textarea name="message" rows="5" class="border rounded form-control">{{question['message']}}</textarea><br>
+    <input type="submit" value="Send" class="btn btn-lg btn-success">
+    </div>
 </form>
 </div>
 {% endblock %}

@@ -7,6 +7,14 @@
 </head>
 <body>
 {% block content%}
+{% with messages=get_flashed_messages(category_filter=["no_user"])%}
+    {% if messages %}
+        {% for message in messages%}
+<div class="m-2 d-flex justify-content-center"><script>alert('{{message}}')</script></div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <div class = "home-text">
     <h1 class="home-title">
         Welcome to LOGOS AskMate
@@ -17,25 +25,28 @@
         On this website you can post questions, upvote and downvote them, upload images and comment on other people's posts.
     </h2>
 </div>
-<table>
-    <tbody>
-    {% for question in latest_questions %}
-        <tr class="home-tr">
-            <td>{{question['submission_time']}}</td>
-            <td>{{question['view_number']}}</td>
-            <td>{{question['vote_number']}}</td>
-            <td>{{question['title']}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="mb-3 d-flex justify-content-center">
+    <table class="table border rounded bg-light w-50">
+        <tbody>
+        {% for question in latest_questions %}
+            <tr>
+                <td>{{question['submission_time']}}</td>
+                <td>{{question['view_number']}}</td>
+                <td>{{question['vote_number']}}</td>
+                <td>{{question['title']}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 <div>
 
 </div>
-
-<img src="../static/images/123535.png" class="review-image" width="430" height="230">
-<img src="../static/images/34523462.png" class="review-image" width="430" height="230">
-<img src="../static/images/45734573457.png" class="review-image" width="430" height="230">
+<div>
+    <img src="../static/images/123535.png" class="review-image" width="430" height="230">
+    <img src="../static/images/34523462.png" class="review-image" width="430" height="230">
+    <img src="../static/images/45734573457.png" class="review-image" width="430" height="230">
+</div>
 {% endblock %}
 </body>
 </html>

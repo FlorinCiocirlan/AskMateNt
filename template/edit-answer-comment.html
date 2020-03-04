@@ -7,12 +7,12 @@
 </head>
 <body>
 {% block content %}
-<div>
-    <form action="{{url_for('edit_answer_comment', comment_id=comment['id'])}}" method="POST">
-        <label class="answer-title">Edit comment</label>
-        <textarea name="comment" minlength="5" rows="5" cols="35">{{comment['message']}}</textarea>
+<div class="d-flex justify-content-center mt-3">
+    <form action="{{url_for('edit_answer_comment', comment_id=comment['id'])}}" method="POST" class="bg-light p-3 border rounded form-group">
+        <label class="h3 text-secondary">Edit comment</label>
+        <textarea name="comment" minlength="5" rows="5" class="border rounded mt-3 form-control">{{comment['message']}}</textarea>
         <div>
-        <input type="submit" value="submit" class="button">
+        <input type="submit" value="submit" class="btn btn-lg btn-success">
         </div>
     </form>
 </div>

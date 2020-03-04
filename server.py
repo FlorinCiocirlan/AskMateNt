@@ -1,8 +1,6 @@
-from flask import Flask, request, redirect, render_template, url_for,flash
+from flask import Flask, request, redirect, render_template, url_for, session, flash
 import connection, data_manager, utility
 import os, sys
-from werkzeug.utils import secure_filename
-from forms import RegistrationForm, LoginForm
 
 UPLOAD_FOLDER = 'static/images'
 
@@ -15,6 +13,7 @@ app.config['UPLOAD_FOLDER'] = "static/images/"
 def index_route():
     list_latest_questions = data_manager.get_latest_questions()
     fieldnames = ["Submission time", "View number", "Vote number", "Title"]
+    print(session.get('username'))
     return render_template("index.html", latest_questions=list_latest_questions, headers=fieldnames)
 
 
@@ -42,19 +41,29 @@ def question_route(id):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question_route():
-    if request.method == "POST":
-        data_manager.add_question(request.form['title'], request.form['message'])
-        return redirect("list")
-    return render_template("add-question.html")
+    if session.get('username') is not None:
+        if request.method == "POST":
+            data_manager.add_question(request.form['title'], request.form['message'],session['user_id'])
+            return redirect("list")
+        return render_template("add-question.html")
+    else:
+        flash('You must login before using features','no_user')
+        return redirect(url_for('index_route'))
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def answer_route(question_id):
-    if request.method == "GET":
-        return render_template("add-answer.html", question_id=question_id)
-    elif request.method == "POST":
-        data_manager.add_answers(question_id, request.form['message'])
-        return redirect(url_for("question_route", id=question_id))
+    if session.get('username') is not None:
+        if request.method == "GET":
+            return render_template("add-answer.html", question_id=question_id)
+        elif request.method == "POST":
+            message=request.form['message']
+            user_id=session['user_id']
+            data_manager.add_answers(question_id, message,user_id)
+            return redirect(url_for("question_route", id=question_id))
+    else:
+        flash('You must login before using features', 'no_user')
+        return redirect(url_for('question_route',id=question_id))
 
 
 @app.route("/about")
@@ -63,19 +72,27 @@ def about():
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_route(question_id):
-    if request.method == "GET":
-        question = data_manager.get_question(question_id)
-        return render_template("edit-question.html", question=question, question_id=question_id)
-    elif request.method == "POST":
-        title=request.form['title']
-        message=request.form['message']
-        data_manager.update_question("question",title,message,question_id)
+    if session.get('username') is not None:
+        if request.method == "GET":
+            question = data_manager.get_question(question_id)
+            return render_template("edit-question.html", question=question, question_id=question_id)
+        elif request.method == "POST":
+            title=request.form['title']
+            message=request.form['message']
+            data_manager.update_question("question",title,message,question_id)
+            return redirect(url_for('question_route', id=question_id))
+    else:
+        flash('You must login before using features', 'no_user')
         return redirect(url_for('question_route', id=question_id))
 
 @app.route("/question/<question_id>/delete", methods=["GET","POST"])
 def delete_question(question_id):
-    data_manager.delete_row("question", "id", question_id)
-    return redirect(url_for("list_route"))
+    if session.get('username') is not None:
+        data_manager.delete_row("question", "id", question_id)
+        return redirect(url_for("list_route"))
+    else:
+        flash('You must login before using features', 'no_user')
+        return redirect(url_for('question_route', id=question_id))
 
 @app.route("/answer/<answer_id>")
 def see_answer_route(answer_id):
@@ -86,38 +103,57 @@ def see_answer_route(answer_id):
 
 @app.route("/<question_id>/answer/<answer_id>/delete")
 def delete_answer(answer_id, question_id):
-    data_manager.delete_row("answer", "id", answer_id)
-    return redirect(url_for('question_route' , id=question_id))
+    if session.get('username') is not None:
+        data_manager.delete_row("answer", "id", answer_id)
+        return redirect(url_for('question_route' , id=question_id))
+    else:
+        flash('You must login before using features', 'no_user')
+        return redirect(url_for('question_route', id=question_id))
 
 @app.route("/<question_id>/answer/<answer_id>/edit", methods=["GET", "POST"])
 def edit_answer(answer_id, question_id):
-    if request.method == "GET":
-        answer = data_manager.get_answer(answer_id)
-        return render_template("edit-answer.html", answer=answer, question_id=question_id)
-    elif request.method == "POST":
-        message=request.form['message']
-        data_manager.update_answer(answer_id, message)
+    if session.get('username') is not None:
+        if request.method == "GET":
+            answer = data_manager.get_answer(answer_id)
+            return render_template("edit-answer.html", answer=answer, question_id=question_id)
+        elif request.method == "POST":
+            message=request.form['message']
+            data_manager.update_answer(answer_id, message)
+            return redirect(url_for('question_route', id=question_id))
+    else:
+        flash('You must login before using features', 'no_user')
         return redirect(url_for('question_route', id=question_id))
 
 @app.route('/answer/<answer_id>/new-comment', methods=['GET','POST'])
 def add_comment_to_answer(answer_id):
-    if request.method == 'GET':
-        return render_template('add_coment_to_answer.html', answer_id=answer_id)
-    elif request.method == "POST":
-        data_manager.add_comment_ans(answer_id, request.form['comment_answer'])
+    if session.get('username') is not None:
+        if request.method == 'GET':
+            return render_template('add_coment_to_answer.html', answer_id=answer_id)
+        elif request.method == "POST":
+            user_id = session['user_id']
+            comment=request.form['comment_answer']
+            data_manager.add_comment_ans(answer_id, comment, user_id)
+            return redirect(url_for('see_answer_route', answer_id=answer_id))
+    else:
+        flash('You must login before using features', 'no_user')
         return redirect(url_for('see_answer_route', answer_id=answer_id))
 
 
 
 @app.route("/question/<question_id>/new_comment", methods=["GET", "POST"])
 def question_comment_route(question_id):
-    if request.method == "GET":
-        return render_template("add-question-comment.html", question_id=question_id)
-    elif request.method == "POST":
-        message=request.form['question-comment']
-        question_id=question_id
-        data_manager.add_question_comment(question_id,message)
-        return redirect(url_for("question_route",id=question_id))
+    if session.get('username') is not None:
+        if request.method == "GET":
+            return render_template("add-question-comment.html", question_id=question_id)
+        elif request.method == "POST":
+            message=request.form['question-comment']
+            question_id=question_id
+            user_id = session['user_id']
+            data_manager.add_question_comment(question_id,message,user_id)
+            return redirect(url_for("question_route",id=question_id))
+    else:
+        flash('You must login before using features', 'no_user')
+        return redirect(url_for('question_route', id=question_id))
 
 @app.route("/comments/<comment_id>/delete")
 def delete_question_comments(comment_id):
@@ -190,20 +226,45 @@ def search_route():
     keyword_answers = data_manager.answer_search_result(search_phrase)
     return render_template("results-page.html", question_results=keyword_questions, answer_results=keyword_answers, phrase=search_phrase)
 
+@app.route("/register", methods=['GET','POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        username = request.form['username']
+        password = utility.hash_password(request.form['password'])
+        if data_manager.if_already_exist('email',email) or data_manager.if_already_exist('username',username):
+            flash('Username or Email Adress already in use')
+            return render_template('register.html')
+        else:
+            data_manager.insert_user(username, password, email)
+            return redirect(url_for('login'))
+    return render_template("register.html")
 
-@app.route("/answer/<answer_id>/vote_up")
-def answer_vote_up(answer_id):
-    data_manager.vote_answer_up(answer_id)
-    question_id=data_manager.get_questionID_by_answerId(answer_id)
-    return redirect(url_for("question_route",id=question_id))
+@app.route("/login", methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if data_manager.if_already_exist('username', username):
+            hashed_password = data_manager.get_hashed_password(username)
+            if utility.verify_password(password,hashed_password):
+                session['username'] = username
+                session['user_id'] = data_manager.find_id_by_username(username)
+                flash(f"You are logged in as {username}", "succesful_login")
+                return redirect(url_for('index_route'))
+            else:
+                flash("Invalid username or password","invalid_login")
+        else:
+            flash("Invalid username or password","invalid_login")
+    return render_template('login.html')
 
-@app.route("/answer/<answer_id>/vote_down")
-def answer_vote_down(answer_id):
-    data_manager.vote_answer_down(answer_id)
-    question_id=data_manager.get_questionID_by_answerId(answer_id)
-    return redirect(url_for("question_route",id=question_id))
+@app.route("/logout")
+def logout():
+    session.pop('username')
+    session.pop('user_id')
+    return redirect(url_for('index_route'))
 
 if __name__ == "__main__":
     app.run(debug=True,
-            host="0.0.0.0",
+            host='0.0.0.0',
             port=5000)

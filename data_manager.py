@@ -35,16 +35,16 @@ def update_question(cursor, table, title, message, question_id):
         )
 
 @connection.connection_handler
-def add_question_comment(cursor, question_id,message):
+def add_question_comment(cursor, question_id,message,user_id):
     id = utility.generate_comment_id()
     question_id=question_id
     message=message
     edited_count = 0
     submission_time=utility.get_date()
     cursor.execute(
-        sql.SQL("INSERT INTO {table} VALUES(%s, %s,NULL,%s,%s,%s);")
+        sql.SQL("INSERT INTO {table} VALUES(%s, %s,NULL,%s,%s,%s,%s);")
             .format(table=sql.Identifier('comment')),
-            [id, question_id, message,submission_time, edited_count]
+            [id, question_id, message,submission_time, edited_count,user_id]
     )
 
 
@@ -62,7 +62,7 @@ def get_question_comments(id):
     return list_with_comments
 
 @connection.connection_handler
-def add_question(cursor, title, message):
+def add_question(cursor, title, message,user_id):
     id = utility.generate_question_id()
     submission_time = utility.get_date()
     view_number = 0
@@ -71,9 +71,9 @@ def add_question(cursor, title, message):
     message = message
     image = ''
     cursor.execute(
-        sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s,%s,%s,%s,%s);")
+        sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s,%s,%s,%s,%s,%s);")
         .format(table=sql.Identifier('question')),
-        [id, submission_time, view_number, vote_number, title, message, image]
+        [id, submission_time, view_number, vote_number, title, message, image,user_id]
     )
 
 
@@ -164,7 +164,7 @@ def answer_search_result(search_phrase):
 
 
 @connection.connection_handler
-def add_answers(cursor, question_id, message):
+def add_answers(cursor, question_id, message,user_id):
     id = utility.generate_answer_id()
     submission_time = utility.get_date()
     vote_number = 0
@@ -172,9 +172,9 @@ def add_answers(cursor, question_id, message):
     message = message
     image = ''
     cursor.execute(
-        sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s, %s);")
+        sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s, %s, %s);")
             .format(table=sql.Identifier('answer')),
-            [id, submission_time, vote_number, question_id, message, image]
+            [id, submission_time, vote_number, question_id, message, image,user_id]
         )
 
 
@@ -249,15 +249,16 @@ def update_comment(cursor, edited_comment, comment_id):
     )
 
 @connection.connection_handler
-def add_comment_ans(cursor, answer_id, message):
+def add_comment_ans(cursor, answer_id, message, user_id):
     id = utility.generate_comment_id()
     answer_id = answer_id
     message = message
     submission_time = utility.get_date()
     edited_count = 0
+    user_id=session['user_id']
     cursor.execute(
-        sql.SQL("INSERT INTO comment VALUES(%s , NULL,  %s , %s, %s, %s);"),
-        [id, answer_id, message, submission_time, edited_count]
+        sql.SQL("INSERT INTO comment VALUES(%s , NULL,  %s , %s, %s, %s, %s);"),
+        [id, answer_id, message, submission_time, edited_count, user_id]
     )
 
 
@@ -308,4 +309,38 @@ def vote_answer_down(cursor, answer_id):
     answer = get_answer(answer_id)
     new_vote = answer['vote_number'] - 1
     cursor.execute(f"""UPDATE answer SET vote_number = {new_vote} WHERE id={answer_id}""")
+    
+############### User Management ###################
+@connection.connection_handler
+def insert_user(cursor,username,password,email):
+    creation_date = utility.get_date()
+    id=utility.generate_user_id()
+    reputation = 0
+    query=sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s, %s );").format(table=sql.Identifier('users'))
+    cursor.execute(query,[id,password,email,creation_date,reputation,username,])
+
+@connection.connection_handler
+def if_already_exist(cursor,column,data):
+    query=sql.SQL("SELECT * FROM users")
+    cursor.execute(query)
+    new_data=cursor.fetchall()
+    for row in new_data:
+        if row[column] == data:
+            return True
+
+    return False
+
+@connection.connection_handler
+def get_hashed_password(cursor,username):
+    query=sql.SQL("SELECT * FROM {table} WHERE {column} = %s;").format(table=sql.Identifier('users'), column=sql.Identifier('username'))
+    cursor.execute(query,[username])
+    password = cursor.fetchone()
+    return password['password']
+
+@connection.connection_handler
+def find_id_by_username(cursor,username):
+    query=sql.SQL("SELECT id FROM users WHERE username=%s")
+    cursor.execute(query,[username])
+    id = cursor.fetchone()
+    return id['id']
 
