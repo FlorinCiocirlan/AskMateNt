@@ -290,3 +290,22 @@ def get_all_question_comments(cursor):
     question_comments = cursor.fetchall()
     return question_comments
 
+
+def get_questionID_by_answerId(answer_id):
+    all_answers=get_every_answer()
+    for answer in all_answers:
+        if int(answer['id']) == int(answer_id):
+            return answer['question_id']
+
+@connection.connection_handler
+def vote_answer_up(cursor, answer_id):
+    answer = get_answer(answer_id)
+    new_vote = answer['vote_number'] + 1
+    cursor.execute(f"""UPDATE answer SET vote_number = {new_vote} WHERE id={answer_id}""")
+
+@connection.connection_handler
+def vote_answer_down(cursor, answer_id):
+    answer = get_answer(answer_id)
+    new_vote = answer['vote_number'] - 1
+    cursor.execute(f"""UPDATE answer SET vote_number = {new_vote} WHERE id={answer_id}""")
+

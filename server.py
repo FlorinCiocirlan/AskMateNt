@@ -191,25 +191,17 @@ def search_route():
     return render_template("results-page.html", question_results=keyword_questions, answer_results=keyword_answers, phrase=search_phrase)
 
 
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('index_route'))
-    return render_template('register.html', title='Register', form=form)
+@app.route("/answer/<answer_id>/vote_up")
+def answer_vote_up(answer_id):
+    data_manager.vote_answer_up(answer_id)
+    question_id=data_manager.get_questionID_by_answerId(answer_id)
+    return redirect(url_for("question_route",id=question_id))
 
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
-            flash('You have been logged in!', 'success')
-            return redirect(url_for('index_route'))
-        else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+@app.route("/answer/<answer_id>/vote_down")
+def answer_vote_down(answer_id):
+    data_manager.vote_answer_down(answer_id)
+    question_id=data_manager.get_questionID_by_answerId(answer_id)
+    return redirect(url_for("question_route",id=question_id))
 
 if __name__ == "__main__":
     app.run(debug=True,

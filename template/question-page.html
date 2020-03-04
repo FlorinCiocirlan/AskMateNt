@@ -78,21 +78,32 @@
             Add answer
         </a>
     </p>
-    {% for answers in answers_to_display %}
-    </p>
-    <div class="question-answers p-1">
-        <div class="buttons d-flex flex-start">
-            <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}"
-                     id="delete-answer">Delete answer</a></span>
-            <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}"
-                     id="edit-answer">Edit answer</a></span>
-        </div>
-        <span>
-            <div class=" d-flex justify-content-center">
-                <a href = "{{url_for('see_answer_route', answer_id=answers['id'])}}"
-                id="answer-message" style="color: black" class="w-auto">
-                {{answers['message']}}
-                </a>
+    <div>
+        {% for answers in answers_to_display%}
+            <div class="question-answers">
+                <div class="buttons d-flex p-1">
+                    <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}" id="delete-answer">Delete answer</a></span>
+                    <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}" id="edit-answer">Edit answer</a></span>
+                </div>
+                <div class="answer-stats d-flex-">
+                    <a href="{{url_for('answer_vote_up', answer_id=answers['id'])}}"
+                       style="text-decoration: none; transform: translateY(-3px); display: inline-block">
+                        <img alt="vote_up" height="20px" src="{{url_for('static', filename='images/vote_up.png')}}"
+                             width="20px">
+                    </a>
+                    <span class="m-1 d-inline align-middle" id="q-vote">{{answers['vote_number']}}</span>
+                    <a class="mr-5 d-inline align-middle" style="transform: translateY(3px); display: inline-block"
+                       href="{{url_for('answer_vote_down', answer_id=answers['id'])}}">
+                        <img alt="vote_down" height="20" src="{{url_for('static', filename='images/vote_down.png')}}"
+                             width="20px">
+                    </a>
+                    <span class="ml-auto" id="answer-submission">{{answers['submission_time']}}</span>
+                </div>
+                <span class="p-1" id="answer-message">{{answers['message']}}</span>
+                <div class="answer-stats">
+                    <span id="answer-vote">{{answers['vote_number']}}</span>
+                    <span id="answer-submission">{{answers['submission_time']}}</span>
+                </div>
             </div>
         </span>
         <div class="answer-stats d-flex-">
