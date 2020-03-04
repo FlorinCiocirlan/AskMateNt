@@ -10,9 +10,9 @@
 <div class="d-flex justify-content-center m-3">
 <form action = "{{url_for('add_question_route')}}" method="post" enctype="multipart/form-data" class="bg-light border rounded p-3 form-group">
         <p class="text-secondary h3">Title</p>
-        <input name = "title" required class="mb-2 border rounded form-control">
+        <input name = "title" required class="mb-2 border rounded form-control" maxlength="50">
         <p class="text-secondary h3" >Message</p>
-        <textarea name= "message" required rows="5" class="border rounded form-control"></textarea>
+        <textarea name= "message" required rows="5" class="border rounded form-control" maxlength="250"></textarea>
     <div>
         <input type="submit" value="Upload" name="submit-button" class="btn btn-lg btn-success mt-3" >
     </div>

@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-center mt-3">
         <form action="{{url_for('answer_route', question_id=question_id )}}" method="post" class="bg-light border rounded p-3 form-group">
             <p class="h3 text-secondary">Answer</p>
-            <textarea name="message" required rows="5" class="border rounded mt-2 form-control"></textarea>
+            <textarea name="message" required rows="5" class="border rounded mt-2 form-control" maxlength="250"></textarea>
             <input class="btn btn-lg btn-success mt-2" name="submit-button" type="submit" value="Leave answer">
         </form>
     </div>

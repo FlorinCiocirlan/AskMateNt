@@ -255,7 +255,6 @@ def add_comment_ans(cursor, answer_id, message, user_id):
     message = message
     submission_time = utility.get_date()
     edited_count = 0
-    user_id=session['user_id']
     cursor.execute(
         sql.SQL("INSERT INTO comment VALUES(%s , NULL,  %s , %s, %s, %s, %s);"),
         [id, answer_id, message, submission_time, edited_count, user_id]
@@ -344,3 +343,36 @@ def find_id_by_username(cursor,username):
     id = cursor.fetchone()
     return id['id']
 
+@connection.connection_handler
+def find_userid_by_questionid(cursor,question_id):
+    query=sql.SQL("SELECT {user_id} FROM {table} WHERE {id}=%s").format(user_id=sql.Identifier('user_id'), table=sql.Identifier('question'),id=sql.Identifier('id'))
+    cursor.execute(query,[question_id])
+    user_id=cursor.fetchone()
+    if user_id:
+        return user_id
+    else:
+        return False
+
+@connection.connection_handler
+def find_userid_by_answerid(cursor, answer_id):
+    query = sql.SQL("SELECT {user_id} FROM {table} WHERE {id}=%s").format(user_id=sql.Identifier('user_id'),
+                                                                          table=sql.Identifier('answer'),
+                                                                          id=sql.Identifier('id'))
+    cursor.execute(query, [answer_id])
+    user_id = cursor.fetchone()
+    if user_id:
+        return user_id
+    else:
+        return False
+
+@connection.connection_handler
+def find_userid_by_commentid(cursor, comment_id):
+    query = sql.SQL("SELECT {user_id} FROM {table} WHERE {id}=%s").format(user_id=sql.Identifier('user_id'),
+                                                                          table=sql.Identifier('comment'),
+                                                                          id=sql.Identifier('id'))
+    cursor.execute(query, [comment_id])
+    user_id = cursor.fetchone()
+    if user_id:
+        return user_id
+    else:
+        return False

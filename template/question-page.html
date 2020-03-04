@@ -16,8 +16,18 @@
     {% endif %}
 {% endwith %}
 
+{% with messages=get_flashed_messages(category_filter=["no_acces"])%}
+    {% if messages %}
+        {% for message in messages%}
+            <script>
+                alert('{{message}}')
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
-<div class="delete-edit-question border rounded p-2">
+
+<div class="bg-white border rounded p-2 m-3">
     <div class="d-flex">
         <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
         <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
@@ -90,21 +100,18 @@
     </p>
     {% for answers in answers_to_display %}
     </p>
-    <div class="question-answers p-1 border rounded">
+    <div class="bg-white m-1 p-1 border rounded">
         <div class="buttons d-flex flex-start">
             <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}"
                      id="delete-answer">Delete answer</a></span>
             <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}"
                      id="edit-answer">Edit answer</a></span>
         </div>
-        <span>
-            <div class=" d-flex justify-content-center">
-                <a href = "{{url_for('see_answer_route', answer_id=answers['id'])}}"
-                id="answer-message" style="color: black" class="w-auto">
+            <div class=" d-flex justify-content-center container-fluid">
+                <a href = "{{url_for('see_answer_route', answer_id=answers['id'])}}" style="color: black" class="d-block text-truncate text-wrap    ">
                 {{answers['message']}}
                 </a>
             </div>
-        </span>
         <div class="answer-stats m-0">
             <a href="{{url_for('answer_vote_up', answer_id=answers['id'])}}"
                style="text-decoration: none; transform: translateY(-3px); display: inline-block">
