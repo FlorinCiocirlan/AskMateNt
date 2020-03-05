@@ -33,10 +33,16 @@ def list_route():
 @app.route("/question/<id>", methods=['GET','POST'])
 def question_route(id):
     if request.method == "GET":
+        answer_user_data=data_manager.find_username_for_answer(id)
+
+        question_user_data=data_manager.find_username_by_question_id(id)
+        quest_comm_user_data = data_manager.find_userdata_for_questions_comments(id)
         question = data_manager.get_question(id)
         answers = data_manager.get_all_answers(id)
         question_comments = data_manager.get_question_comments(id)
-        return render_template("question-page.html", to_display=question, answers_to_display=answers, question_id=id, comments=question_comments)
+        return render_template("question-page.html", to_display=question,q_user_data=question_user_data,
+                               a_user_data=answer_user_data, answers_to_display=answers, question_id=id,
+                               comments=question_comments, quest_comm_user_data=quest_comm_user_data)
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question_route():
@@ -109,7 +115,9 @@ def delete_question(question_id):
 def see_answer_route(answer_id):
     answer=data_manager.get_answer(answer_id)
     answer_comments = data_manager.get_certain_answer_comments(answer_id)
-    return render_template("answer-page.html", answer=answer, comments=answer_comments)
+    ans_comm_user_data = data_manager.find_userdata_for_answers_comments(answer_id)
+    return render_template("answer-page.html", answer=answer, comments=answer_comments,
+                           ans_comm_user_data=ans_comm_user_data)
 
 
 @app.route("/<question_id>/answer/<answer_id>/delete")
