@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>LOGOS AskMate</title>
-    <link rel="stylesheet" type="text/css" href="../static/main.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
     <link rel="shortcut icon" href="../static/images/favicon.ico" />
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/"><img src="{{url_for("static", filename = "images/logo2.png")}}" width="80" height="80" alt="logo"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,30 @@
         <a class="nav-link" href="/about">About</a>
       </li>
     </ul>
+      <div class="d-flex ml-auto flex-column">
+          <div class="d-flex ml-auto pb-4">
+          {% if session['username'] %}
+              <span class="mr-1">
+                    <button data-toggle="collapse" data-target="#user" aria-expanded="false" class="text-decoration-none btn btn-outline-primary btn-sm"  style="font-size: 13px">{{session['username']}}</button>
+                    <div id="user" class="collapse bg-primary p-1 border rounded">
+                        <p><a class="badge text-white">Profile</a></p>
+                        <p><a class="badge text-white">Activity</a></p>
+                        <p><a class="badge text-white" href="{{url_for('logout')}}">Logout</a></p>
+                    </div>
+              </span>
+          {% endif %}
+          {% if not session['username']%}
+          <span><a href="{{url_for('login')}}" class="text-decoration-none btn btn-success btn-sm mr-1"  style="font-size: 13px" >Login</a></span>
+          <span><a href="{{url_for('register')}}" class="text-decoration-none btn btn-info btn-sm"  style="font-size: 13px" >Register</a></span>
+          {% endif %}
+          </div>
+          <div class="mb-3">
+            <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('search_route')}}" method="GET">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+      </div>
   </div>
 </nav>
 

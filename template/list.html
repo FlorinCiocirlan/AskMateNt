@@ -7,44 +7,62 @@
 </head>
 <body>
 {% block content %}
-<table class="forum-table">
-    <thead>
-    <tr class="thead-row">
-        {% for header in fieldnames %}
-        <th>
-        {{header}}
-        </th>
-        {% endfor %}
-    </tr>
-    </thead>
-
-    <tbody>
-        <tr class = "tbody-row">
-            {% for row in file %}
+    <div class="m-2">
+        <form action="{{url_for('list_route')}}" method="post">
+            <select name="sort_by" class="sort-by">
+                <option>Title</option>
+                <option>Submission time</option>
+                <option>Message</option>
+                <option>Views</option>
+                <option>Votes</option>
+            </select>
+            <select name="direction" class="sort-by">
+                <option>ASC</option>
+                <option>DESC</option>
+            </select>
+            <input type="submit" name="Submit" value="Order" class="btn btn-sm btn-outline-secondary">
+        </form>
+    </div>
+<div class="table-responsive p-3 border rounded bg-light">
+    <table class="table table-hover">
+        <thead class="bg-info">
             <tr>
-            <td>
-                {{row["submission_time"]}}
-            </td>
-            <td>
-                {{row["view_number"]}}
-            </td>
-            <td>
-                {{row["vote_number"]}}
-            </td>
-            <td>
-                <a href = {{url_for('question_route', id = row['id'])}}>
-                {{row["title"]}}
-                </a>
-            </td>
-            {% endfor %}
-        </tr>
-        </tr>
+                {% for header in fieldnames %}
+                <th class="h3 text-dark">
+                    {{header}}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
 
-    </tbody>
-</table>
+        <tbody>
+            <tr>
+                {% for row in file %}
+                <tr>
+                <td>
+                    {{row["submission_time"]}}
+                </td>
+                <td>
+                    {{row["view_number"]}}
+                </td>
+                <td>
+                    {{row["vote_number"]}}
+                </td>
+                <td>
+                    <a href = {{url_for('question_route', id = row['id'])}} class="badge badge-light">
+                    {{row["title"]}}
+                    </a>
+                </td>
+                {% endfor %}
+            </tr>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
 <div>
-    <a href="{{url_for('add_question_route')}}">
-    <button type="button" class="button-add-question"> Add question </button>
+    <a class="btn btn-success btn-lg m-5" href="{{url_for('add_question_route')}}">
+        Add question
     </a>
 </div>
 {% endblock %}

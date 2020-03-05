@@ -7,15 +7,19 @@
 </head>
 <body>
 {% block content %}
-<div class="add-question-content">
-<form action = "{{url_for('add_question_route')}}" method="post" enctype="multipart/form-data">
-        <p>Title</p>
-        <input name = "title" required>
-        <p>Message</p>
-        <textarea name= "message" required></textarea>
+<div class="d-flex justify-content-center m-3">
+<form action = "{{url_for('add_question_route')}}" method="post" enctype="multipart/form-data" class="bg-light border rounded p-3 form-group">
+        <p class="text-secondary h3">Title</p>
+        <input name = "title" required class="mb-2 border rounded form-control" maxlength="50">
+        <p class="text-secondary h3" >Message</p>
+        <textarea name= "message" required rows="5" class="border rounded form-control" maxlength="250"></textarea>
     <div>
+<<<<<<< HEAD
         <input type="file" accept=".jpg,.png .jpeg" name = "picture" class="button" id="browse-button" >
         <input type="submit" value="Upload" name="submit-button" class="button" id="upload-button">
+=======
+        <input type="submit" value="Upload" name="submit-button" class="btn btn-lg btn-success mt-3" >
+>>>>>>> 034bd108b59ec2d3d2d9e8cb87c3ac3ce98ec7df
     </div>
 </form>
 </div>

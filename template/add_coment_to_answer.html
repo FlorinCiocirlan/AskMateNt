@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div class="d-flex justify-content-center mt-3">
+<form action="{{url_for('add_comment_to_answer', answer_id=answer_id)}}" method='POST' class="bg-light border rounded p-4 form-group">
+    <label class="mb-2 h2 text-secondary">Add comment</label>
+    <textarea name="comment_answer" rows="5" minlength="5" class="mb-3 mt-3 border rounded form-control" maxlength="250"></textarea>
+    <input type="submit" value="Submit" class="btn btn-success btn-lg">
+</form>
+</div>
+{% endblock %}
+</body>
+</html>

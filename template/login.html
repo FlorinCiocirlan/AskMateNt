@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div class="d-flex justify-content-center text-black-50 font-weight bold">
+    <form class="d-flex flex-column form-group bg-light shadow p-5 mt-5 border rounded" method="POST" action="{{url_for('login')}}">
+        <label>Username</label>
+        <input class="border rounded form-control" type="text" name="username" required minlength="6">
+        <label>Password</label>
+        <input class="border rounded form-control" type="password" name="password" required>
+        <div class="d-flex justify-content-center">
+        <input type="submit" class="btn btn-sm btn-info mt-4 w-50" value="Login">
+        </div>
+        {% with messages=get_flashed_messages(category_filter=['invalid_login']) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mt-2"><span class="text-danger">{{message}}</span></div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="mt-3">
+        <span class="mt-3">Don't have an account? </span><span><a href="{{url_for('register')}}">SignUp</a></span>
+        </div>
+    </form>
+</div>
+{% endblock %}
+</body>
+</html>
