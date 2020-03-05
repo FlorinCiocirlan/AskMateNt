@@ -32,8 +32,7 @@
               <span class="mr-1">
                     <button data-toggle="collapse" data-target="#user" aria-expanded="false" class="text-decoration-none btn btn-outline-primary btn-sm"  style="font-size: 13px">{{session['username']}}</button>
                     <div id="user" class="collapse bg-primary p-1 border rounded">
-                        <p><a class="badge text-white">Profile</a></p>
-                        <p><a class="badge text-white">Activity</a></p>
+                        <p><a href="{{url_for('user')}}" class="badge text-white">Profile</a></p>
                         <p><a class="badge text-white" href="{{url_for('logout')}}">Logout</a></p>
                     </div>
               </span>

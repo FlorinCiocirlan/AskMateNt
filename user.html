@@ -1,0 +1,19 @@
+{% extends 'layout.html %}
+{% block content %}
+{% for row in user %}
+{{row.username}}
+<br>
+{{row.reputation}}
+<br>
+{{row.creation_date}}
+<br>
+{{row.title}}
+<br>
+{{row.qMessage}}
+<br>
+{{row.aMessage}}
+<br>
+{{row.cMessage}}
+<br>
+{% endfor %}
+{% endblock %}

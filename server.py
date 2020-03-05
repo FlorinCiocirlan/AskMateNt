@@ -13,7 +13,7 @@ app.config['UPLOAD_FOLDER'] = "static/images/"
 def index_route():
     list_latest_questions = data_manager.get_latest_questions()
     fieldnames = ["Submission time", "View number", "Vote number", "Title"]
-    print(session.get('username'))
+    print(data_manager.get_user_data(session['user_id']))
     return render_template("index.html", latest_questions=list_latest_questions, headers=fieldnames)
 
 
@@ -334,6 +334,14 @@ def logout():
     session.pop('username')
     session.pop('user_id')
     return redirect(url_for('index_route'))
+
+@app.route("/user")
+def user():
+    fieldname = ["Question title", "Question message", "Answer message", "Comment message"]
+    user = data_manager.get_user_data(session['user_id'])
+    return render_template('user.html', user=user, fieldname=fieldname)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True,
