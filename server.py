@@ -74,7 +74,7 @@ def edit_route(question_id):
     if session.get('username') is not None:
         question_user_id=data_manager.find_userid_by_questionid(question_id)
         if question_user_id:
-            if session['user_id'] == question_user_id['user_id']:
+            if session['user_id'] == question_user_id['user_id'] or session['username'] == 'administrator':
                 if request.method == "GET":
                     question = data_manager.get_question(question_id)
                     return render_template("edit-question.html", question=question, question_id=question_id)
@@ -95,7 +95,7 @@ def delete_question(question_id):
     if session.get('username') is not None:
         question_user_id=data_manager.find_userid_by_questionid(question_id)
         if question_user_id:
-            if session['user_id'] == question_user_id['user_id']:
+            if session['user_id'] == question_user_id['user_id'] or session['username'] == 'administrator':
                 data_manager.delete_row("question", "id", question_id)
                 return redirect(url_for("list_route"))
             else:
@@ -117,7 +117,7 @@ def delete_answer(answer_id, question_id):
     if session.get('username') is not None:
         answer_user_id=data_manager.find_userid_by_answerid(answer_id)
         if answer_user_id:
-            if session['user_id'] == answer_user_id['user_id']:
+            if session['user_id'] == answer_user_id['user_id'] or session['username'] == 'administrator':
                 data_manager.delete_row("answer", "id", answer_id)
                 return redirect(url_for('question_route' , id=question_id))
             else:
@@ -132,7 +132,7 @@ def edit_answer(answer_id, question_id):
     if session.get('username') is not None:
         answer_user_id = data_manager.find_userid_by_answerid(answer_id)
         if answer_user_id:
-            if session['user_id'] == answer_user_id['user_id']:
+            if session['user_id'] == answer_user_id['user_id'] or session['username'] == 'administrator':
                 if request.method == "GET":
                     answer = data_manager.get_answer(answer_id)
                     return render_template("edit-answer.html", answer=answer, question_id=question_id)
@@ -185,7 +185,7 @@ def delete_question_comments(comment_id):
     if session.get('username') is not None:
         comment_user_id=data_manager.find_userid_by_commentid(comment_id)
         if comment_user_id:
-            if session['user_id'] == comment_user_id['user_id']:
+            if session['user_id'] == comment_user_id['user_id'] or session['username'] == 'administrator':
                 table = "comment"
                 column = "id"
                 data_manager.delete_row(table, column, comment_id)
@@ -203,7 +203,7 @@ def delete_answer_comments(comment_id):
     if session.get('username') is not None:
         answer_comment_id=data_manager.find_userid_by_commentid(comment_id)
         if answer_comment_id:
-            if session['user_id'] == answer_comment_id['user_id']:
+            if session['user_id'] == answer_comment_id['user_id'] or session['username'] == 'administrator':
                 table = "comment"
                 column = "id"
                 data_manager.delete_row(table, column, comment_id)
@@ -222,7 +222,7 @@ def edit_comment(comment_id):
     if session.get('username') is not None:
         comment_user_id=data_manager.find_userid_by_commentid(comment_id)
         if comment_user_id:
-            if session['user_id'] == comment_user_id['user_id']:
+            if session['user_id'] == comment_user_id['user_id'] or session['username'] == 'administrator':
                 comment = data_manager.get_comment(question_id, comment_id)
                 if request.method == "GET":
                     return render_template("edit-comment.html", comment=comment)
@@ -246,7 +246,7 @@ def edit_answer_comment(comment_id):
     if session.get('username') is not None:
         comment_user_id=data_manager.find_userid_by_commentid(comment_id)
         if comment_user_id:
-            if session['user_id'] == comment_user_id['user_id']:
+            if session['user_id'] == comment_user_id['user_id'] or session['username'] == 'administrator':
                 comment = data_manager.get_answer_comment(comment_id)
                 if request.method == "GET":
                     return render_template('edit-answer-comment.html', comment=comment)
