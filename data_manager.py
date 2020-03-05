@@ -390,10 +390,11 @@ def find_username_by_question_id(cursor,question_id):
 
 @connection.connection_handler
 def find_username_for_answer(cursor, question_id):
-    query = sql.SQL("SELECT users.id, username, reputation FROM users left JOIN answer ON users.id = answer.user_id JOIN question ON "
+    query = sql.SQL("SELECT DISTINCT users.id, username, reputation FROM users left JOIN answer ON users.id = answer.user_id JOIN question ON "
                   "question.id = answer.question_id WHERE question.id=%s;")
     cursor.execute(query,[question_id])
     answer_user_data = cursor.fetchall()
+    print(answer_user_data)
     if answer_user_data:
         return answer_user_data
     else:
