@@ -48,9 +48,7 @@ def add_question_comment(cursor, question_id, message, user_id):
     submission_time = utility.get_date()
     cursor.execute(
         sql.SQL("INSERT INTO {table} VALUES(%s, %s,NULL,%s,%s,%s,%s);")
-            .format(table=sql.Identifier('comment')),
-        [id, question_id, message, submission_time, edited_count, user_id]
-    )
+            .format(table=sql.Identifier('comment')),[id, question_id, message, submission_time, edited_count, user_id])
 
 
 def get_comment(question_id, comment_id):
@@ -264,7 +262,7 @@ def add_comment_ans(cursor, answer_id, message, user_id):
     edited_count = 0
     cursor.execute(
         sql.SQL("INSERT INTO comment VALUES(%s , NULL,  %s , %s, %s, %s, %s);"),
-        [id, answer_id, message, submission_time, edited_count, user_id]
+        [id, answer_id, message, edited_count, submission_time, user_id]
     )
 
 
@@ -396,6 +394,7 @@ def find_userid_by_commentid(cursor, comment_id):
         return False
 
 
+
 @connection.connection_handler
 def get_user_data(cursor,user_id):
     query = sql.SQL("SELECT username, reputation, users.creation_date, question.title, question.message as qmessage, answer.message as amessage, comment.message as cmessage "
@@ -408,4 +407,65 @@ def get_user_data(cursor,user_id):
     data = cursor.fetchall()
 
     return data
+
+
+@connection.connection_handler
+def find_username_by_question_id(cursor,question_id):
+    query=sql.SQL("SELECT username, reputation FROM users JOIN question on question.user_id = users.id WHERE question.id=%s;")
+    cursor.execute(query,[question_id])
+    username = cursor.fetchone()
+    print(username)
+    if username:
+        return username
+    else:
+        return None
+
+@connection.connection_handler
+def find_username_for_answer(cursor, question_id):
+    query = sql.SQL("SELECT users.id, username, reputation FROM users left JOIN answer ON users.id = answer.user_id JOIN question ON "
+                  "question.id = answer.question_id WHERE question.id=%s;")
+    cursor.execute(query,[question_id])
+    answer_user_data = cursor.fetchall()
+    if answer_user_data:
+        return answer_user_data
+    else:
+        return None
+
+@connection.connection_handler
+def find_userdata_for_questions_comments(cursor, question_id):
+    query = sql.SQL("SELECT distinct users.id, username, reputation FROM users left JOIN comment ON "
+                    "users.id = comment.user_id JOIN question "
+                    "ON question.id = comment.question_id WHERE question.id=%s;")
+    cursor.execute(query,[question_id])
+    quest_comm_user_data = cursor.fetchall()
+    if quest_comm_user_data:
+        return quest_comm_user_data
+    else:
+        return None
+
+@connection.connection_handler
+def find_userdata_for_answers_comments(cursor, answer_id):
+    query = sql.SQL("SELECT distinct users.id, username, reputation FROM users left JOIN comment ON "
+                    "users.id = comment.user_id JOIN answer "
+                    "ON answer.id = comment.answer_id WHERE answer.id=%s;")
+    cursor.execute(query,[answer_id])
+    ans_comm_user_data = cursor.fetchall()
+    if ans_comm_user_data:
+        return ans_comm_user_data
+    else:
+        return None
+
+@connection.connection_handler
+def get_vote_number_answer(cursor,user_id):
+    query = sql.SQL('select vote_number from answer where user_id=%s;')
+    cursor.execute(query,[user_id])
+    ans_vote_number = cursor.fetchall()
+    return ans_vote_number
+
+@connection.connection_handler
+def get_cote_number_question(cursor,user_id):
+    query = sql.SQL('select vote_number from question where user_id=%s;')
+    cursor.execute(query,[user_id])
+    quest_vote_number = cursor.fetchall()
+    return quest_vote_number
 
