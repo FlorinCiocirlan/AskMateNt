@@ -26,37 +26,48 @@
     {% endif %}
 {% endwith %}
 
-
-<div class="bg-white border rounded p-2 m-3">
-    <div class="d-flex">
-        <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
-        <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
-        <a class="ml-auto" href="{{url_for('question_comment_route', question_id=question_id)}}"
-           id="add-comment-question">Add comment</a>
+<div class="d-flex flex-column m-4">
+    <div class="d-flex bg-transparent text-monospace">
+        {% if q_user_data %}
+            <span class="text-secondary">Posted by:</span>
+                <span class="text-info">{{q_user_data['username']}}</span>
+                <div>
+                    <img class="ml-2" src="{{url_for('static',filename='images/reputation.png')}}" width="20px" height="20px">
+                    <span class="text-info">{{q_user_data['reputation']}}</span>
+                </div>
+        {% endif %}
     </div>
-    <span id="q-title"><h4>{{to_display['title']}}</h4></span>
-    <span id="q-message">{{to_display['message']}}</span>
-    <div class="d-flex">
-        <div class="d-inline">
-            <a href="{{url_for('question_vote_up', question_id=to_display['id'])}}"
-               style="text-decoration: none; transform: translateY(-3px); display: inline-block">
-                <img alt="vote_up" height="20px" src="{{url_for('static', filename='images/vote_up.png')}}"
-                     width="20px">
-            </a>
-            <span class="m-1 d-inline align-middle" id="q-vote">{{to_display['vote_number']}}</span>
-            <a class="mr-5 d-inline align-middle"
-               href="{{url_for('question_vote_down', question_id=to_display['id'])}}">
-                <img alt="vote_down" height="20" src="{{url_for('static', filename='images/vote_down.png')}}"
-                     width="20px">
-            </a>
+    <div class="bg-white border rounded p-2 w-100">
+        <div class="d-flex">
+            <span><a href="{{url_for('delete_question', question_id=question_id)}}" id="delete">Delete question</a></span>
+            <span><a href="{{url_for('edit_route', question_id=question_id)}}" id="edit">Edit question</a></span>
+            <a class="ml-auto" href="{{url_for('question_comment_route', question_id=question_id)}}"
+               id="add-comment-question">Add comment</a>
         </div>
-        <div class="d-inline">
-            <img alt="views" class="d-inline align-middle" height="18px" src="{{url_for('static', filename='images/eye.png')}}"
-                 width="18px">
-            <span class="align-middle" id="q-view">{{to_display['view_number']}}</span>
-        </div>
-        <span class="ml-auto" id="q-submission-time">{{to_display['submission_time']}}</span>
+        <span id="q-title"><h4>{{to_display['title']}}</h4></span>
+        <span id="q-message">{{to_display['message']}}</span>
+        <div class="d-flex">
+            <div class="d-inline">
+                <a href="{{url_for('question_vote_up', question_id=to_display['id'])}}"
+                   style="text-decoration: none; transform: translateY(-3px); display: inline-block">
+                    <img alt="vote_up" height="20px" src="{{url_for('static', filename='images/vote_up.png')}}"
+                         width="20px">
+                </a>
+                <span class="m-1 d-inline align-middle" id="q-vote">{{to_display['vote_number']}}</span>
+                <a class="mr-5 d-inline align-middle"
+                   href="{{url_for('question_vote_down', question_id=to_display['id'])}}">
+                    <img alt="vote_down" height="20" src="{{url_for('static', filename='images/vote_down.png')}}"
+                         width="20px">
+                </a>
+            </div>
+            <div class="d-inline">
+                <img alt="views" class="d-inline align-middle" height="18px" src="{{url_for('static', filename='images/eye.png')}}"
+                     width="18px">
+                <span class="align-middle" id="q-view">{{to_display['view_number']}}</span>
+            </div>
+            <span class="ml-auto" id="q-submission-time">{{to_display['submission_time']}}</span>
 
+        </div>
     </div>
 </div>
 
@@ -66,6 +77,20 @@
     </div>
     <div class="collapse" id="content">
         {% for row in comments %}
+        {% if row %}
+
+            {% if quest_comm_user_data %}
+            {% for user in quest_comm_user_data %}
+                {% if row['user_id'] == user['id']%}
+                    <div class="d-flex mr-auto m-1 pl-1 pr-1 flex-row text-monospace">
+                        <span class="text-secondary">Posted by:</span>
+                        <span class="text-info">{{user['username']}}</span>
+                        <span class="ml-2"><img src="{{url_for('static', filename='images/reputation.png')}}" width="20px" height="20px"></span>
+                        <span class="align-middle text-info pl-2">{{user['reputation']}}</span>
+                    </div>
+                {% endif%}
+            {% endfor %}
+        {% endif %}
         <div class="individual-comment p-2">
             <p>{{row['message']}}</p>
             <div class="d-flex">
@@ -88,45 +113,61 @@
                 <span class="ml-auto" style="font-size:13px; font-weight: bold">{{row['submission_time']}}</span>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 </div>
 
-<div>
+<div class="d-flex flex-column ml-auto mr-auto">
     <p>
         <a href="{{url_for('answer_route', question_id = question_id)}}" id="add-comment">
             Add answer
         </a>
     </p>
     {% for answers in answers_to_display %}
-    </p>
-    <div class="bg-white m-1 p-1 border rounded">
-        <div class="buttons d-flex flex-start">
-            <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}"
-                     id="delete-answer">Delete answer</a></span>
-            <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}"
-                     id="edit-answer">Edit answer</a></span>
-        </div>
-            <div class=" d-flex justify-content-center container-fluid">
-                <a href = "{{url_for('see_answer_route', answer_id=answers['id'])}}" style="color: black" class="d-block text-truncate text-wrap    ">
-                {{answers['message']}}
-                </a>
+        {% if answers %}
+    <div>
+        {% if a_user_data%}
+            {% for user in a_user_data%}
+                {% if answers['user_id'] == user['id']%}
+                    <div class="d-flex mr-auto m-1 pl-1 pr-1 flex-row text-monospace">
+                        <span class="text-secondary">Posted by:</span>
+                        <span class="text-info">{{user['username']}}</span>
+                        <span class="ml-2"><img src="{{url_for('static', filename='images/reputation.png')}}" width="20px" height="20px"></span>
+                        <span class="align-middle text-info pl-2">{{user['reputation']}}</span>
+                    </div>
+                {% endif%}
+            {% endfor %}
+        {% endif %}
+        <div class="bg-white m-1 p-1 border rounded">
+            <div class="buttons d-flex flex-start">
+                <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}"
+                         id="delete-answer">Delete answer</a></span>
+                <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}"
+                         id="edit-answer">Edit answer</a></span>
             </div>
-        <div class="answer-stats m-0">
-            <a href="{{url_for('answer_vote_up', answer_id=answers['id'])}}"
-               style="text-decoration: none; transform: translateY(-3px); display: inline-block">
-                <img alt="vote_up" height="20px" src="{{url_for('static', filename='images/vote_up.png')}}"
-                     width="20px">
-            </a>
-            <span class="m-1 d-inline align-middle" id="q-vote">{{answers['vote_number']}}</span>
-            <a class="mr-5 d-inline align-middle" style="transform: translateY(3px); display: inline-block"
-               href="{{url_for('answer_vote_down', answer_id=answers['id'])}}">
-                <img alt="vote_down" height="20" src="{{url_for('static', filename='images/vote_down.png')}}"
-                     width="20px">
-            </a>
-            <span class="ml-auto" id="answer-submission">{{answers['submission_time']}}</span>
+                <div class=" d-flex justify-content-center container-fluid">
+                    <a href = "{{url_for('see_answer_route', answer_id=answers['id'])}}" style="color: black" class="d-block text-truncate text-wrap    ">
+                    {{answers['message']}}
+                    </a>
+                </div>
+            <div class="answer-stats m-0">
+                <a href="{{url_for('answer_vote_up', answer_id=answers['id'])}}"
+                   style="text-decoration: none; transform: translateY(-3px); display: inline-block">
+                    <img alt="vote_up" height="20px" src="{{url_for('static', filename='images/vote_up.png')}}"
+                         width="20px">
+                </a>
+                <span class="m-1 d-inline align-middle" id="q-vote">{{answers['vote_number']}}</span>
+                <a class="mr-5 d-inline align-middle" style="transform: translateY(3px); display: inline-block"
+                   href="{{url_for('answer_vote_down', answer_id=answers['id'])}}">
+                    <img alt="vote_down" height="20" src="{{url_for('static', filename='images/vote_down.png')}}"
+                         width="20px">
+                </a>
+                <span class="ml-auto" id="answer-submission">{{answers['submission_time']}}</span>
+            </div>
         </div>
-    </div>
+            </div>
+    {% endif %}
     {% endfor %}
 </div>
 {% endblock %}
