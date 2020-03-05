@@ -7,16 +7,6 @@
 </head>
 <body>
 {% block content %}
-<<<<<<< HEAD
-<div class="text">
-{% for data in to_display.values() %}
-    {% if data %}
-        {% if ((".jpg") or (".jpeg") or (".png")) in data %}
-    <div class="question-image"><img src="{{url_for('static', filename = 'images/'+ data)}}" width="640" height="640"/></div>
-        {% else %}
-    <span class="answer-text"> {{data}}</span>
-        {% endif %}
-=======
 
 {% with messages=get_flashed_messages(category_filter=["no_user"])%}
     {% if messages %}
@@ -33,7 +23,6 @@
                 alert('{{message}}')
             </script>
         {% endfor %}
->>>>>>> 034bd108b59ec2d3d2d9e8cb87c3ac3ce98ec7df
     {% endif %}
 {% endwith %}
 
