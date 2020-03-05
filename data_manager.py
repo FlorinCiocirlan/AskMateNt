@@ -1,6 +1,7 @@
 import connection, utility
 from psycopg2 import sql
 
+
 ################# Questions functions ##############################
 
 
@@ -11,6 +12,7 @@ def get_question(cursor, question_id):
                    )
     question = cursor.fetchone()
     return question
+
 
 @connection.connection_handler
 def vote_question_down(cursor, question_id):
@@ -25,27 +27,28 @@ def vote_question_up(cursor, question_id):
     new_vote = question['vote_number'] + 1
     cursor.execute(f"""UPDATE question SET vote_number = {new_vote} WHERE id={question_id}""")
 
+
 @connection.connection_handler
 def update_question(cursor, table, title, message, question_id):
     cursor.execute(
         sql.SQL("UPDATE {table} SET {title} = %s, {message} = %s WHERE {id}=%s;")
-        .format(table=sql.Identifier(table),title=sql.Identifier('title'),message=sql.Identifier('message'),id=sql.Identifier('id')),
+            .format(table=sql.Identifier(table), title=sql.Identifier('title'), message=sql.Identifier('message'),
+                    id=sql.Identifier('id')),
         [title, message, question_id]
 
-        )
+    )
+
 
 @connection.connection_handler
-def add_question_comment(cursor, question_id,message,user_id):
+def add_question_comment(cursor, question_id, message, user_id):
     id = utility.generate_comment_id()
-    question_id=question_id
-    message=message
+    question_id = question_id
+    message = message
     edited_count = 0
-    submission_time=utility.get_date()
+    submission_time = utility.get_date()
     cursor.execute(
         sql.SQL("INSERT INTO {table} VALUES(%s, %s,NULL,%s,%s,%s,%s);")
-            .format(table=sql.Identifier('comment')),
-            [id, question_id, message, edited_count,submission_time, user_id]
-    )
+            .format(table=sql.Identifier('comment')),[id, question_id, message, submission_time, edited_count, user_id])
 
 
 def get_comment(question_id, comment_id):
@@ -55,14 +58,14 @@ def get_comment(question_id, comment_id):
             return comment
 
 
-
 def get_question_comments(id):
     comments = get_all_question_comments()
     list_with_comments = [comment for comment in comments if int(comment['question_id']) == int(id)]
     return list_with_comments
 
+
 @connection.connection_handler
-def add_question(cursor, title, message,user_id):
+def add_question(cursor, title, message, user_id):
     id = utility.generate_question_id()
     submission_time = utility.get_date()
     view_number = 0
@@ -72,11 +75,9 @@ def add_question(cursor, title, message,user_id):
     image = ''
     cursor.execute(
         sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s,%s,%s,%s,%s,%s);")
-        .format(table=sql.Identifier('question')),
-        [id, submission_time, view_number, vote_number, title, message, image,user_id]
+            .format(table=sql.Identifier('question')),
+        [id, submission_time, view_number, vote_number, title, message, image, user_id]
     )
-
-
 
 
 def get_questionId_by_commentId(comment_id):
@@ -87,17 +88,17 @@ def get_questionId_by_commentId(comment_id):
 
 
 def get_questionID_by_answerId(answer_id):
-    all_answers=get_every_answer()
+    all_answers = get_every_answer()
     for answer in all_answers:
         if int(answer['id']) == int(answer_id):
             return answer['question_id']
 
+
 def get_answerId_by_questionId(question_id):
-    all_answers=get_every_answer()
+    all_answers = get_every_answer()
     for answer in all_answers:
         if int(answer['question_id']) == int(question_id):
             return answer['id']
-
 
 
 def get_latest_questions():
@@ -120,7 +121,7 @@ def get_all_questions(cursor):
 
 
 def question_search_result(search_phrase):
-    splitted_search_phrase=search_phrase.split()
+    splitted_search_phrase = search_phrase.split()
     all_questions = get_all_questions()
 
     for word in list(splitted_search_phrase):
@@ -129,9 +130,11 @@ def question_search_result(search_phrase):
 
     questions_keyword_list = []
     for question in all_questions:
-        if any( word.lower() in question['title'].lower() or word in question['message'].lower() for word in splitted_search_phrase ):
+        if any(word.lower() in question['title'].lower() or word in question['message'].lower() for word in
+               splitted_search_phrase):
             questions_keyword_list.append(question)
     return questions_keyword_list
+
 
 ################## Answers functions ########################
 @connection.connection_handler
@@ -139,6 +142,8 @@ def vote_answer_up(cursor, answer_id):
     answer = get_answer(answer_id)
     new_vote = answer['vote_number'] + 1
     cursor.execute(f"""UPDATE answer SET vote_number = {new_vote} WHERE id={answer_id}""")
+
+
 @connection.connection_handler
 def vote_answer_down(cursor, answer_id):
     answer = get_answer(answer_id)
@@ -147,8 +152,8 @@ def vote_answer_down(cursor, answer_id):
 
 
 def answer_search_result(search_phrase):
-    splitted_search_phrase=search_phrase.split()
-    all_answers=get_every_answer()
+    splitted_search_phrase = search_phrase.split()
+    all_answers = get_every_answer()
 
     for word in list(splitted_search_phrase):
         if len(word) < 3:
@@ -161,10 +166,8 @@ def answer_search_result(search_phrase):
     return answers_keyword_list
 
 
-
-
 @connection.connection_handler
-def add_answers(cursor, question_id, message,user_id):
+def add_answers(cursor, question_id, message, user_id):
     id = utility.generate_answer_id()
     submission_time = utility.get_date()
     vote_number = 0
@@ -174,9 +177,8 @@ def add_answers(cursor, question_id, message,user_id):
     cursor.execute(
         sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s, %s, %s);")
             .format(table=sql.Identifier('answer')),
-            [id, submission_time, vote_number, question_id, message, image,user_id]
-        )
-
+        [id, submission_time, vote_number, question_id, message, image, user_id]
+    )
 
 
 @connection.connection_handler
@@ -194,6 +196,7 @@ def get_every_answer(cursor):
     answers = cursor.fetchall()
     return answers
 
+
 def get_answerId_by_commentId(comment_id):
     all_comments = get_all_answers_comments()
     for comment in all_comments:
@@ -202,21 +205,21 @@ def get_answerId_by_commentId(comment_id):
 
 
 def get_answer(answer_id):
-    answers=get_every_answer()
+    answers = get_every_answer()
     for answer in answers:
         if int(answer['id']) == int(answer_id):
             return answer
 
-########################### General functions #######################
 
+########################### General functions #######################
 
 
 @connection.connection_handler
 def update_answer(cursor, answer_id, message):
     cursor.execute(
         sql.SQL("UPDATE {table} SET {message} = %s WHERE {id}=%s;")
-        .format(table=sql.Identifier('answer'),message=sql.Identifier('message'),id=sql.Identifier('id')),
-        [message,answer_id]
+            .format(table=sql.Identifier('answer'), message=sql.Identifier('message'), id=sql.Identifier('id')),
+        [message, answer_id]
     )
 
 
@@ -224,17 +227,17 @@ def update_answer(cursor, answer_id, message):
 def delete_row(cursor, table, column, id):
     cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {column} = %s;")
-        .format(table=sql.Identifier(table), column=sql.Identifier(column)),
+            .format(table=sql.Identifier(table), column=sql.Identifier(column)),
         [id]
     )
 
 
 ########################## Comments functions ###########################
 @connection.connection_handler
-def update_edited_count(cursor,comment_id):
+def update_edited_count(cursor, comment_id):
     cursor.execute(
         sql.SQL("UPDATE comment SET {edited_count}={edited_count} + 1 WHERE {id} = %s;")
-        .format(id=sql.Identifier('id'), edited_count=sql.Identifier('edited_count')),
+            .format(id=sql.Identifier('id'), edited_count=sql.Identifier('edited_count')),
         [comment_id]
     )
 
@@ -244,9 +247,11 @@ def update_comment(cursor, edited_comment, comment_id):
     new_date = utility.get_date()
     cursor.execute(
         sql.SQL("UPDATE comment SET {message} = %s, {submission_time} = %s WHERE {id}=%s;")
-        .format(message=sql.Identifier('message'), submission_time=sql.Identifier('submission_time'), id=sql.Identifier('id')),
+            .format(message=sql.Identifier('message'), submission_time=sql.Identifier('submission_time'),
+                    id=sql.Identifier('id')),
         [edited_comment, new_date, comment_id]
     )
+
 
 @connection.connection_handler
 def add_comment_ans(cursor, answer_id, message, user_id):
@@ -259,7 +264,6 @@ def add_comment_ans(cursor, answer_id, message, user_id):
         sql.SQL("INSERT INTO comment VALUES(%s , NULL,  %s , %s, %s, %s, %s);"),
         [id, answer_id, message, edited_count, submission_time, user_id]
     )
-
 
 
 def get_answer_comment(comment_id):
@@ -275,9 +279,10 @@ def get_all_answers_comments(cursor):
     answer_comments = cursor.fetchall()
     return answer_comments
 
+
 def get_certain_answer_comments(answer_id):
     answer_comments = get_all_answers_comments()
-    answer_comments_list =[]
+    answer_comments_list = []
     for comment in answer_comments:
         if int(comment['answer_id']) == int(answer_id):
             answer_comments_list.append(comment)
@@ -292,10 +297,11 @@ def get_all_question_comments(cursor):
 
 
 def get_questionID_by_answerId(answer_id):
-    all_answers=get_every_answer()
+    all_answers = get_every_answer()
     for answer in all_answers:
         if int(answer['id']) == int(answer_id):
             return answer['question_id']
+
 
 @connection.connection_handler
 def vote_answer_up(cursor, answer_id):
@@ -303,51 +309,60 @@ def vote_answer_up(cursor, answer_id):
     new_vote = answer['vote_number'] + 1
     cursor.execute(f"""UPDATE answer SET vote_number = {new_vote} WHERE id={answer_id}""")
 
+
 @connection.connection_handler
 def vote_answer_down(cursor, answer_id):
     answer = get_answer(answer_id)
     new_vote = answer['vote_number'] - 1
     cursor.execute(f"""UPDATE answer SET vote_number = {new_vote} WHERE id={answer_id}""")
-    
+
+
 ############### User Management ###################
 @connection.connection_handler
-def insert_user(cursor,username,password,email):
+def insert_user(cursor, username, password, email):
     creation_date = utility.get_date()
-    id=utility.generate_user_id()
+    id = utility.generate_user_id()
     reputation = 0
-    query=sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s, %s );").format(table=sql.Identifier('users'))
-    cursor.execute(query,[id,password,email,creation_date,reputation,username,])
+    query = sql.SQL("INSERT INTO {table} VALUES(%s, %s, %s, %s, %s, %s );").format(table=sql.Identifier('users'))
+    cursor.execute(query, [id, password, email, creation_date, reputation, username, ])
+
 
 @connection.connection_handler
-def if_already_exist(cursor,column,data):
-    query=sql.SQL("SELECT * FROM users")
+def if_already_exist(cursor, column, data):
+    query = sql.SQL("SELECT * FROM users")
     cursor.execute(query)
-    new_data=cursor.fetchall()
+    new_data = cursor.fetchall()
     for row in new_data:
         if row[column] == data:
             return True
 
     return False
 
+
 @connection.connection_handler
-def get_hashed_password(cursor,username):
-    query=sql.SQL("SELECT * FROM {table} WHERE {column} = %s;").format(table=sql.Identifier('users'), column=sql.Identifier('username'))
-    cursor.execute(query,[username])
+def get_hashed_password(cursor, username):
+    query = sql.SQL("SELECT * FROM {table} WHERE {column} = %s;").format(table=sql.Identifier('users'),
+                                                                         column=sql.Identifier('username'))
+    cursor.execute(query, [username])
     password = cursor.fetchone()
     return password['password']
 
+
 @connection.connection_handler
-def find_id_by_username(cursor,username):
-    query=sql.SQL("SELECT id FROM users WHERE username=%s")
-    cursor.execute(query,[username])
+def find_id_by_username(cursor, username):
+    query = sql.SQL("SELECT id FROM users WHERE username=%s")
+    cursor.execute(query, [username])
     id = cursor.fetchone()
     return id['id']
 
+
 @connection.connection_handler
-def find_userid_by_questionid(cursor,question_id):
-    query=sql.SQL("SELECT {user_id} FROM {table} WHERE {id}=%s").format(user_id=sql.Identifier('user_id'), table=sql.Identifier('question'),id=sql.Identifier('id'))
-    cursor.execute(query,[question_id])
-    user_id=cursor.fetchone()
+def find_userid_by_questionid(cursor, question_id):
+    query = sql.SQL("SELECT {user_id} FROM {table} WHERE {id}=%s").format(user_id=sql.Identifier('user_id'),
+                                                                          table=sql.Identifier('question'),
+                                                                          id=sql.Identifier('id'))
+    cursor.execute(query, [question_id])
+    user_id = cursor.fetchone()
     if user_id:
         return user_id
     else:
@@ -365,6 +380,7 @@ def find_userid_by_answerid(cursor, answer_id):
     else:
         return False
 
+
 @connection.connection_handler
 def find_userid_by_commentid(cursor, comment_id):
     query = sql.SQL("SELECT {user_id} FROM {table} WHERE {id}=%s").format(user_id=sql.Identifier('user_id'),
@@ -376,6 +392,22 @@ def find_userid_by_commentid(cursor, comment_id):
         return user_id
     else:
         return False
+
+
+
+@connection.connection_handler
+def get_user_data(cursor,user_id):
+    query = sql.SQL("SELECT username, reputation, users.creation_date, question.title, question.message as qmessage, answer.message as amessage, comment.message as cmessage "
+                        "FROM users "
+                        "JOIN question ON users.id=question.user_id "
+                        "LEFT JOIN answer on question.id=answer.question_id " 
+                        "LEFT JOIN comment on question.id = comment.question_id "
+                        "WHERE users.id=1;")
+    cursor.execute(query,[user_id])
+    data = cursor.fetchall()
+
+    return data
+
 
 @connection.connection_handler
 def find_username_by_question_id(cursor,question_id):
@@ -437,3 +469,4 @@ def get_cote_number_question(cursor,user_id):
     cursor.execute(query,[user_id])
     quest_vote_number = cursor.fetchall()
     return quest_vote_number
+

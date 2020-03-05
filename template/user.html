@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="table-responsive p-3 d-flex flex-column justify-content-center p-3">
+    <div class="d-flex justify-content-center">
+        <div class="bg-info text-whhite border rounded w-50">
+            <p>{{user[0]['username']}}</p>
+            <p>{{user[0]['creation_date']}}</p>
+            <p>{{user[0]['reputation']}}</p>
+        </div>
+    </div>
+<table class="table table-hover w-50 bg-light border rounded">
+        <thead class="bg-info">
+            <tr>
+                {% for header in fieldname %}
+                <th class="h3 text-dark">
+                    {{header}}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+    <tbody>
+            <tr>
+                {% for row in user %}
+                <tr>
+                 <td>
+                     {% if row.title %}
+                    {{row.title}}
+                     {% endif %}
+                </td>
+                 <td>
+                     {% if row.qmessage %}
+                    {{row.qmessage}}
+                     {% endif %}
+                </td>
+                 <td>
+                     {% if row.amessage %}
+                    {{row.amessage}}
+                     {% endif %}
+                </td>
+                <td>
+                    {% if row.cmessage %}
+                    {{row.cmessage}}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            </tr>
+
+        </tbody>
+</table>
+</div>
+{% endblock %}
