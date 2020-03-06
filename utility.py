@@ -49,8 +49,10 @@ def generate_answer_id(cursor):
     dict_with_ids = cursor.fetchall()
     for row in dict_with_ids:
         list_of_ids.append(int(row['id']))
-    return max(list_of_ids) + 1
-
+    if list_of_ids:
+        return max(list_of_ids) + 1
+    else:
+        return 1
 
 @connection.connection_handler
 def generate_comment_id(cursor):

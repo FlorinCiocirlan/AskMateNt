@@ -79,7 +79,7 @@
                         <img alt="edit" height="20px" src="{{url_for('static', filename='images/edit.png')}}"
                              width="20px">
                     </a>
-                    {% if row['edited_count']%}
+                    {% if row['edited_count'] %}
                     <span class="align_middle" id="q-view">{{row['edited_count']}}</span>
                     {% else %}
                     <span class="align_middle" id="q-view">0</span>
@@ -94,26 +94,26 @@
 
 <div>
     <p>
-<<<<<<< HEAD
-    <span class="submission-time">{{answers["submission_time"]}}</span>
-    <span class="vote-number">{{answers["vote_number"]}}</span>
-    <span class="message">{{answers["message"]}}</span>
-        {% if ((".jpg") or (".jpeg") or (".png")) in answers %}
-    <img src="{{url_for('static', filename = 'images/'+ data)}}/>
-=======
         <a href="{{url_for('answer_route', question_id = question_id)}}" id="add-comment">
             Add answer
         </a>
->>>>>>> 034bd108b59ec2d3d2d9e8cb87c3ac3ce98ec7df
     </p>
     {% for answers in answers_to_display %}
     </p>
     <div class="bg-white m-1 p-1 border rounded">
-        <div class="buttons d-flex flex-start">
+        <div class="buttons d-flex flex-row">
             <span><a href="{{url_for('delete_answer', answer_id=answers['id'], question_id=question_id)}}"
                      id="delete-answer">Delete answer</a></span>
-            <span><a href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}"
+            <span><a class="mr-auto" href="{{url_for('edit_answer', answer_id=answers['id'], question_id=question_id)}}"
                      id="edit-answer">Edit answer</a></span>
+            <!-- Accept answer \/ -->
+            {% if accepted_answer %}
+                {% if accepted_answer == answers['id']%}
+                    <img src="{{url_for('static', filename='images/check.png')}}" width="20" height="20" class="ml-auto">
+                    <span class="text-success pl-2">Solution</span>
+                {% endif %}
+            {% endif %}
+            <!-- Accept answer /\ -->
         </div>
             <div class=" d-flex justify-content-center container-fluid">
                 <a href = "{{url_for('see_answer_route', answer_id=answers['id'])}}" style="color: black" class="d-block text-truncate text-wrap    ">

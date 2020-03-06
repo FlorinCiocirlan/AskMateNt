@@ -376,3 +376,37 @@ def find_userid_by_commentid(cursor, comment_id):
         return user_id
     else:
         return False
+
+@connection.connection_handler
+def if_already_accepted(cursor,question_id):
+    query = sql.SQL("SELECT id,accepted FROM answer WHERE question_id=%s;")
+    cursor.execute(query,[question_id])
+    answers=cursor.fetchall()
+    for answer in answers:
+        if answer['accepted'] == True:
+            return answer['id']
+    return False
+
+@connection.connection_handler
+def accept_answer(cursor,answer_id):
+    query=sql.SQL("UPDATE answer SET accepted=True WHERE id=%s;")
+    cursor.execute(query,[answer_id])
+    accepted_answer=data_manager.if_already_accepted(id)
+    answer = data_manager.get_answer(answer_id)
+    answer_comments = data_manager.get_certain_answer_comments(answer_id)
+    ans_comm_user_data = data_manager.find_userdata_for_answers_comments(answer_id)
+    question_id = data_manager.get_questionID_by_answerId(answer_id)
+    question_user_id = data_manager.find_userid_by_questionid(question_id)
+    if_accepted = data_manager.if_already_accepted(question_id)
+    if request.method == 'GET':
+        return render_template("answer-page.html", answer=answer, comments=answer_comments,
+                               ans_comm_user_data=ans_comm_user_data,accepted=if_accepted)
+    elif session.get('user_id'):
+        if session['user_id'] == question_user_id['user_id']:
+            if request.method == 'POST':
+                data_manager.accept_answer(answer_id)
+                return redirect(url_for('question_route', id=question_id))
+        else:
+            flash("You cannot accept answers")
+            return render_template("answer-page.html",answer=answer, comments=answer_comments,
+                               ans_comm_user_data=ans_comm_user_data,accepted=if_accepted)

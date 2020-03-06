@@ -21,6 +21,13 @@
             Add comment
         </a>
         </div>
+        {% if session['username']%}
+            {% if accepted == False %}
+            <form action="{{url_for('see_answer_route', answer_id=answer['id'])}}" method="POST" class="mr-auto ml-auto w-25">
+                        <button type="submit" class="btn btn-sm btn-success">Accept solution</button>
+            </form>
+            {% endif %}
+        {% endif %}
         <p class="text-wrap text-break p-2">
                 {{answer['message']}}
         </p>

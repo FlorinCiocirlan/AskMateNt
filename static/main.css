@@ -99,14 +99,6 @@ table {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
-<<<<<<< HEAD
-    width: 50%;
-}
-
-.coloration {
-    font-size: 50px;
-    color: red;
-=======
     margin-bottom: 5%;
 }
 
@@ -141,6 +133,22 @@ a {
     border: 1px solid #ed484a;
     border-radius: 5px;
     padding: 2px;
+    font-size: 10px;
+    color: white;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    justify-self: flex-end;
+    left: 0px;
+    width: fit-content;
+}
+
+#accept {
+    background-color: #4b914b;
+    border: 1px solid #4b914b;
+    border-radius: 5px;
+    padding: 2px;
+    margin-left: 3px;
     font-size: 10px;
     color: white;
     text-decoration: none;
@@ -370,5 +378,4 @@ a {
   color: black;
   text-decoration: none;
   cursor: pointer;
->>>>>>> 034bd108b59ec2d3d2d9e8cb87c3ac3ce98ec7df
 }
