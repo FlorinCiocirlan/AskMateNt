@@ -1,6 +1,6 @@
 # ASKMATE
 
-### This is a Q&A website designed for tech questions.
+### This is a Q&A website designed for tech questions. You can add a question , answer to a question or add a comment to a question/answer. You must be logged in before you can use it's main features.
 
 #### It was developed on the second week of web module and took about 1 month
 
