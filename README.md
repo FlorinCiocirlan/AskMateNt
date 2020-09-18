@@ -2,7 +2,7 @@
 
 ### This is a Q&A website designed for tech questions. 
 #### It was developed on the second week of web module and took about 1 month
-### You can add a question , answer to a question or add a comment to a question/answer. You must be logged in before you can use it's main features.
+#### You can add a question , answer to a question or add a comment to a question/answer. You must be logged in before you can use it's main features.
 
 
 ### Some of the main features are :
